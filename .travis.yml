@@ -3,6 +3,9 @@ language: node_js
 node_js:
 - '4.2'
 - '5.5'
+cache:
+  directories:
+  - node_modules
 script:
 - make lint
 - make test
