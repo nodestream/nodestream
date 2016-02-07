@@ -10,7 +10,8 @@ module.exports = {
   ],
 
   rules: {
-    // If your editor cannot find and show these to you, occasionally turn this off and run the linter
+    // If your editor cannot find and show these to you, occasionally turn this off and run the
+    // linter
     'no-warning-comments': 0,
 
     // Some deviations from the defined coding style
