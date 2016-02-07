@@ -1,0 +1,32 @@
+{
+  "name": "Nodestream",
+  "description": "Streaming library for binary data transfers",
+  "version": "0.1.0",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream/issues"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.6",
+    "eslint": "^2.0.0-rc.0",
+    "eslint-config-javascript": "github:strvcom/js-coding-standards#2.0.0-rc.3",
+    "istanbul": "^0.4.2",
+    "jsdoc": "^3.4.0",
+    "mocha": "^2.3.4"
+  },
+  "engines": {
+    "node": ">=5.1.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream",
+  "keywords": [],
+  "license": "BSD-3-Clause",
+  "main": "lib/nodestream"
+}

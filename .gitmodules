@@ -1,0 +1,3 @@
+[submodule "targets"]
+	path = targets
+	url = https://github.com/Dreamscapes/makefiles.git

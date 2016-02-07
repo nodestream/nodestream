@@ -1,0 +1,22 @@
+# Dependencies
+node_modules
+
+# Generated files
+docs
+coverage
+
+# This allows local overrides of Make configuration without worrying about accidentally commiting
+# them with other changes
+local.mk
+
+# Garbage
+*.log
+*~
+*#
+.DS_STORE
+.netbeans
+nbproject
+.idea
+.node_history
+*.sublime-*
+*.atom-*
