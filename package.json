@@ -1,5 +1,5 @@
 {
-  "name": "Nodestream",
+  "name": "nodestream",
   "description": "Streaming library for binary data transfers",
   "version": "0.1.0",
   "author": {
