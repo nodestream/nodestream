@@ -1,13 +1,19 @@
----
 sudo: false
 language: node_js
 node_js:
-# LTS
 - '4.2'
-# Stable
 - '5.5'
 script:
 - make lint
 - make test
 after_success:
 - make coveralls
+deploy:
+  provider: npm
+  email: rr.rossmann@gmail.com
+  api_key:
+    secure: ab6KQPc/4ASdXOkbIu0A1Eg9dJrTZsVUt/tK3NK8478f/hhxJAxC4DGkZuDVzAtvncSIUMgAzaE9/8l2ccLYGkLxT4dqtV2l0fyb31cpDL6Wziuv7jAQPwHDcuQkuK9le4wI8KHI0ClSrt9LADvlsWT/qssW9LDauqkuQn5PMkCNzkRVDyv7ua7OPjC8KtD1HMYMMZQ31olnFBtaR7a1PpUhCxj1JkaoP5fl5jE2EKFo85Gq6oi0q4UmXmrZyQ69K/5Vo57XcbiIv5t4qohcgOsDwZSW9XMb6H66hjbERmERMshsTS/fvAuyUSUncaD5d0DHfUzgXY+pxev/RYQ8E2AsuhovPnJAtqpuqao9Vy8isZQ3Go52f7M0jsg6+wY14b9/ApWT17n6mN789td/LdLJCTeOwh7rv1Hfc1qSmPULksxHk07SFAKq6EC+3JfHTPX9dghpfT3UhdBqCOr1Fl1wZ40DbI/bXaram0JLn+O1QL11hQQ3Dfzwae+ljj8cMpeUo1RHfWQuGI8U4lm2Ost5PPfUC+m78r/UlqpcASQ+MTNbxXNw2VW6C1ODqjtf+XOp5q1mKsU+xB3DcKZz60g5McyP8y8Z2d1t7gMk9kkBTb89lFzJqwnw+/0IC+ZcTGR2Qkm3MZ2Rcs/hSh6+aea54T/JUG0C1dTfY5Y3HYs=
+  on:
+    tags: true
+    repo: nodestream/nodestream
+    node: '5.5'
