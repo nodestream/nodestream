@@ -28,5 +28,9 @@
   "homepage": "https://github.com/nodestream/nodestream",
   "keywords": [],
   "license": "BSD-3-Clause",
-  "main": "lib/nodestream"
+  "main": "lib/nodestream",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream.git"
+  }
 }
