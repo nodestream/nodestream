@@ -23,7 +23,7 @@
     "mocha": "^2.3.4"
   },
   "engines": {
-    "node": ">=4.2.0"
+    "node": ">=4.3.0"
   },
   "homepage": "https://github.com/nodestream/nodestream",
   "keywords": [],
