@@ -16,8 +16,8 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
-    "eslint": "^2.0.0-rc.0",
-    "eslint-config-javascript": "github:strvcom/js-coding-standards#2.0.0-rc.3",
+    "eslint": "^2.2.0",
+    "eslint-config-javascript": "github:strvcom/js-coding-standards#2.0.0",
     "istanbul": "^0.4.2",
     "jsdoc": "^3.4.0",
     "mocha": "^2.3.4"
