@@ -13,6 +13,17 @@ const Nodestream = require('../lib/nodestream')
 
 describe('Class: Nodestream', function() {
 
+  let DummyAdapter
+  let storage
+
+  beforeEach(function() {
+    DummyAdapter = function() {}
+    DummyAdapter.prototype.upload = () => Promise.resolve('/a/b/c')
+
+    storage = new Nodestream({ adapter: DummyAdapter })
+  })
+
+
   it('should be a class', function() {
     // Can't test for a class directly... 🙁
     expect(Nodestream).to.be.a('function')
@@ -23,8 +34,8 @@ describe('Class: Nodestream', function() {
   })
 
   it('should instantiate the adapter', function(done) {
-    function DummyAdapter() {
-      expect(this).to.be.instanceof(DummyAdapter)
+    DummyAdapter = function() {
+      expect(this).to.be.instanceof(DummyAdapter)   // eslint-disable-line no-invalid-this
 
       return done()
     }
@@ -35,7 +46,7 @@ describe('Class: Nodestream', function() {
   it('should pass along the adapter configuration to the adapter', function() {
     const testOpts = { customdata: '123' }
 
-    function DummyAdapter(options) {
+    DummyAdapter = function(options) {
       expect(options).to.equal(testOpts)
     }
 
@@ -45,65 +56,45 @@ describe('Class: Nodestream', function() {
 
   describe('.upload()', function() {
 
-    let DummyAdapter
-    let storage
-
-    beforeEach(function() {
-      DummyAdapter = function() {}
-
-      storage = new Nodestream({ adapter: DummyAdapter })
-    })
-
-
     it('should be function', function() {
       expect(storage).to.have.property('upload')
       expect(storage.upload).to.be.a('function')
     })
 
-    it('should normalise options into object if not provided', function(done) {
+    it('should normalise options into object if not provided', function() {
       DummyAdapter.prototype.upload = (file, options) => {
         expect(options).to.be.instanceof(Object)
 
-        return done()
+        return Promise.resolve('a/b/c')
       }
 
-      storage.upload({})
+      return storage.upload({})
     })
 
-    it('should generate a unique name if no name is provided', function(done) {
+    it('should generate a unique name if no name is provided', function() {
       DummyAdapter.prototype.upload = (file, options) => {
         expect(options).to.have.ownProperty('name')
         expect(options.name).to.be.a('string')
 
-        return done()
+        return Promise.resolve('/a/b/c')
       }
 
-      storage.upload({}, {})
+      return storage.upload({}, {})
     })
 
-    it('should not replace the name if it was specified as string', function(done) {
+    it('should not replace the name if it was specified as string', function() {
       DummyAdapter.prototype.upload = (file, options) => {
         expect(options.name).to.equal('testfile')
 
-        return done()
+        return Promise.resolve('/a/b/c')
       }
 
-      storage.upload({}, { name: 'testfile' })
+      return storage.upload({}, { name: 'testfile' })
     })
   })
 
 
   describe('.download()', function() {
-
-    let DummyAdapter
-    let storage
-
-    beforeEach(function() {
-      DummyAdapter = function() {}
-
-      storage = new Nodestream({ adapter: DummyAdapter })
-    })
-
 
     it('should be function', function() {
       expect(storage).to.have.property('download')
@@ -132,16 +123,6 @@ describe('Class: Nodestream', function() {
 
   describe('.remove()', function() {
 
-    let DummyAdapter
-    let storage
-
-    beforeEach(function() {
-      DummyAdapter = function() {}
-
-      storage = new Nodestream({ adapter: DummyAdapter })
-    })
-
-
     it('should be function', function() {
       expect(storage).to.have.property('remove')
       expect(storage.remove).to.be.a('function')
@@ -163,6 +144,56 @@ describe('Class: Nodestream', function() {
       DummyAdapter.prototype.remove = () => retVal
 
       expect(storage.remove('/test/file.txt')).to.equal(retVal)
+    })
+  })
+
+
+  describe('.onUpload()', function() {
+
+    it('should be function', function() {
+      expect(storage).to.have.property('onUpload')
+      expect(storage.onUpload).to.be.a('function')
+    })
+
+    it('should return self', function() {
+      expect(storage.onUpload(() => {})).to.equal(storage)
+    })
+
+    it('should accept class/constructor function', function() {
+      expect(() => storage.onUpload(class {})).to.not.throw()
+      expect(() => storage.onUpload(function() {})).to.not.throw()
+    })
+
+    it('should reject non-class/constructor function values', function() {
+      expect(() => storage.onUpload(1234)).to.throw()
+      expect(() => storage.onUpload('ab')).to.throw()
+      expect(() => storage.onUpload(null)).to.throw()
+      expect(() => storage.onUpload({})).to.throw()
+    })
+  })
+
+
+  describe('.onDownload()', function() {
+
+    it('should be function', function() {
+      expect(storage).to.have.property('onDownload')
+      expect(storage.onDownload).to.be.a('function')
+    })
+
+    it('should return self', function() {
+      expect(storage.onDownload(() => {})).to.equal(storage)
+    })
+
+    it('should accept class/constructor function', function() {
+      expect(() => storage.onDownload(class {})).to.not.throw()
+      expect(() => storage.onDownload(function() {})).to.not.throw()
+    })
+
+    it('should reject non-class/constructor function values', function() {
+      expect(() => storage.onDownload(1234)).to.throw()
+      expect(() => storage.onDownload('ab')).to.throw()
+      expect(() => storage.onDownload(null)).to.throw()
+      expect(() => storage.onDownload({})).to.throw()
     })
   })
 })
