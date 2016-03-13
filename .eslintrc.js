@@ -16,9 +16,7 @@ module.exports = {
 
     // Some deviations from the defined coding style
     'padded-blocks': 0,
-
     curly: [1, 'multi'],
-
     'newline-per-chained-call': 0
   }
 }
