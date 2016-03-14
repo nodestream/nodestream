@@ -28,7 +28,12 @@
     "node": ">=4.3.0"
   },
   "homepage": "https://github.com/nodestream/nodestream",
-  "keywords": [],
+  "keywords": [
+    "stream",
+    "streaming",
+    "upload",
+    "download"
+  ],
   "license": "BSD-3-Clause",
   "main": "lib/nodestream",
   "repository": {
