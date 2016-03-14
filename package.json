@@ -1,7 +1,7 @@
 {
   "name": "nodestream",
   "description": "Streaming library for binary data transfers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Robert Rossmann",
     "email": "rr.rossmann@me.com"
