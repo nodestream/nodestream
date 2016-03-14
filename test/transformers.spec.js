@@ -16,12 +16,11 @@ const Nodestream = require('../lib/nodestream')
 
 describe('Feature: Transformers', function() {
 
-  let DummyAdapter
   let DummyTransform
   let storage
 
   beforeEach(function() {
-    DummyAdapter = function() {}
+    function DummyAdapter() {}
     DummyAdapter.prototype.upload = () => Promise.resolve('/a/b/c')
     DummyAdapter.prototype.download = () => {
       const file = new stream.PassThrough()
