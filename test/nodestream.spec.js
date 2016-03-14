@@ -148,52 +148,47 @@ describe('Class: Nodestream', function() {
   })
 
 
-  describe('.onUpload()', function() {
+  describe('.addTransform()', function() {
+
+    class DummyTransform {
+      static get namespace() {
+        return 'testspace'
+      }
+    }
+
 
     it('should be function', function() {
-      expect(storage).to.have.property('onUpload')
-      expect(storage.onUpload).to.be.a('function')
+      expect(storage).to.have.property('addTransform')
+      expect(storage.addTransform).to.be.a('function')
     })
 
     it('should return self', function() {
-      expect(storage.onUpload(() => {})).to.equal(storage)
+      expect(storage.addTransform('upload', DummyTransform)).to.equal(storage)
     })
 
     it('should accept class/constructor function', function() {
-      expect(() => storage.onUpload(class {})).to.not.throw()
-      expect(() => storage.onUpload(function() {})).to.not.throw()
+      function DummyCtor() {}
+      DummyCtor.namespace = 'testspace'
+
+      expect(() => storage.addTransform('upload', DummyTransform)).to.not.throw()
+      expect(() => storage.addTransform('upload', DummyCtor)).to.not.throw()
+    })
+
+    it('should reject invalid direction', function() {
+      expect(() => storage.addTransform('upsidedown', DummyTransform)).to.throw(/Invalid direction/)
     })
 
     it('should reject non-class/constructor function values', function() {
-      expect(() => storage.onUpload(1234)).to.throw()
-      expect(() => storage.onUpload('ab')).to.throw()
-      expect(() => storage.onUpload(null)).to.throw()
-      expect(() => storage.onUpload({})).to.throw()
-    })
-  })
-
-
-  describe('.onDownload()', function() {
-
-    it('should be function', function() {
-      expect(storage).to.have.property('onDownload')
-      expect(storage.onDownload).to.be.a('function')
+      expect(() => storage.addTransform('upload', 1234)).to.throw()
+      expect(() => storage.addTransform('upload', 'ab')).to.throw()
+      expect(() => storage.addTransform('upload', null)).to.throw()
+      expect(() => storage.addTransform('upload', {})).to.throw()
     })
 
-    it('should return self', function() {
-      expect(storage.onDownload(() => {})).to.equal(storage)
-    })
+    it('should reject implementations without declared namespace', function() {
+      class Invalid {}
 
-    it('should accept class/constructor function', function() {
-      expect(() => storage.onDownload(class {})).to.not.throw()
-      expect(() => storage.onDownload(function() {})).to.not.throw()
-    })
-
-    it('should reject non-class/constructor function values', function() {
-      expect(() => storage.onDownload(1234)).to.throw()
-      expect(() => storage.onDownload('ab')).to.throw()
-      expect(() => storage.onDownload(null)).to.throw()
-      expect(() => storage.onDownload({})).to.throw()
+      expect(() => storage.addTransform('upload', Invalid)).to.throw(ReferenceError)
     })
   })
 })
