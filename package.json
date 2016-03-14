@@ -26,7 +26,7 @@
     "sinon": "^1.17.3"
   },
   "engines": {
-    "node": ">=4.3.0"
+    "node": ">=4.0.0"
   },
   "homepage": "https://github.com/nodestream/nodestream",
   "keywords": [
