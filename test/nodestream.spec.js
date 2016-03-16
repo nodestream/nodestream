@@ -36,7 +36,8 @@ describe('Class: Nodestream', function() {
 
   it('should instantiate the adapter', function(done) {
     DummyAdapter = function() {
-      expect(this).to.be.instanceof(DummyAdapter)   // eslint-disable-line no-invalid-this
+      // eslint-disable-next-line no-invalid-this
+      expect(this).to.be.instanceof(DummyAdapter)
 
       return done()
     }
