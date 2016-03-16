@@ -10,6 +10,7 @@
 
 const expect = require('chai').expect
 const Nodestream = require('../lib/nodestream')
+const stream = require('stream')
 
 describe('Class: Nodestream', function() {
 
@@ -56,6 +57,13 @@ describe('Class: Nodestream', function() {
 
   describe('.upload()', function() {
 
+    let dummyFile
+
+    beforeEach(function() {
+      dummyFile = new stream.Stream()
+    })
+
+
     it('should be function', function() {
       expect(storage).to.have.property('upload')
       expect(storage.upload).to.be.a('function')
@@ -68,7 +76,15 @@ describe('Class: Nodestream', function() {
         return Promise.resolve('a/b/c')
       }
 
-      return storage.upload({})
+      return storage.upload(dummyFile)
+    })
+
+    it('should reject files which are not streams', function() {
+      expect(() => storage.upload({}, {})).to.throw(TypeError)
+    })
+
+    it('should allow uploading instances of streams', function() {
+      expect(() => storage.upload(dummyFile, {})).to.not.throw()
     })
 
     it('should generate a unique name if no name is provided', function() {
@@ -79,7 +95,7 @@ describe('Class: Nodestream', function() {
         return Promise.resolve('/a/b/c')
       }
 
-      return storage.upload({}, {})
+      return storage.upload(dummyFile, {})
     })
 
     it('should not replace the name if it was specified as string', function() {
@@ -89,7 +105,7 @@ describe('Class: Nodestream', function() {
         return Promise.resolve('/a/b/c')
       }
 
-      return storage.upload({}, { name: 'testfile' })
+      return storage.upload(dummyFile, { name: 'testfile' })
     })
   })
 
