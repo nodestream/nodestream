@@ -61,7 +61,7 @@ describe('Class: Nodestream', function() {
     let dummyFile
 
     beforeEach(function() {
-      dummyFile = new stream.Stream()
+      dummyFile = new stream.Readable()
     })
 
 
@@ -80,8 +80,9 @@ describe('Class: Nodestream', function() {
       return storage.upload(dummyFile)
     })
 
-    it('should reject files which are not streams', function() {
+    it('should reject files which are not readable streams', function() {
       expect(() => storage.upload({}, {})).to.throw(TypeError)
+      expect(() => storage.upload(new stream.Writable(), {})).to.throw(TypeError)
     })
 
     it('should allow uploading instances of streams', function() {
