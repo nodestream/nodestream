@@ -109,6 +109,14 @@ describe('Class: Nodestream', function() {
 
       return storage.upload(dummyFile, { name: 'testfile' })
     })
+
+    it('should return the file location as a key named location', function() {
+      return storage.upload(dummyFile)
+      .then(results => {
+        expect(results).to.be.an('object')
+        expect(results).to.have.property('location', '/a/b/c')
+      })
+    })
   })
 
 
