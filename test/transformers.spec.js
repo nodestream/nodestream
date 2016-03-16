@@ -34,7 +34,7 @@ describe('Feature: Transformers', function() {
     }
 
     DummyTransform = function() {}
-    DummyTransform.namespace = 'testspace'
+    DummyTransform.identity = 'testidentity'
     DummyTransform.prototype.transform = file => file
     DummyTransform.prototype.results = () => true
 
@@ -71,7 +71,7 @@ describe('Feature: Transformers', function() {
       DummyTransform = function(options) {
         expect(options).to.equal(config)
       }
-      DummyTransform.namespace = 'testspace'
+      DummyTransform.identity = 'testidentity'
       DummyTransform.prototype.transform = file => file
       DummyTransform.prototype.results = () => true
 
@@ -108,7 +108,7 @@ describe('Feature: Transformers', function() {
       DummyTransform = function(options) {
         expect(options).to.equal(config)
       }
-      DummyTransform.namespace = 'testspace'
+      DummyTransform.identity = 'testidentity'
       DummyTransform.prototype.transform = file => file
       DummyTransform.prototype.results = () => true
 

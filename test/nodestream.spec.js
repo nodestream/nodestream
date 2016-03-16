@@ -151,8 +151,8 @@ describe('Class: Nodestream', function() {
   describe('.addTransform()', function() {
 
     class DummyTransform {
-      static get namespace() {
-        return 'testspace'
+      static get identity() {
+        return 'testidentity'
       }
     }
 
@@ -168,7 +168,7 @@ describe('Class: Nodestream', function() {
 
     it('should accept class/constructor function', function() {
       function DummyCtor() {}
-      DummyCtor.namespace = 'testspace'
+      DummyCtor.identity = 'testidentity'
 
       expect(() => storage.addTransform('upload', DummyTransform)).to.not.throw()
       expect(() => storage.addTransform('upload', DummyCtor)).to.not.throw()
@@ -185,7 +185,7 @@ describe('Class: Nodestream', function() {
       expect(() => storage.addTransform('upload', {})).to.throw()
     })
 
-    it('should reject implementations without declared namespace', function() {
+    it('should reject implementations without declared identity', function() {
       class Invalid {}
 
       expect(() => storage.addTransform('upload', Invalid)).to.throw(ReferenceError)
