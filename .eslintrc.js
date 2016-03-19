@@ -10,6 +10,9 @@ module.exports = {
   ],
 
   rules: {
+    // Node.js 4 does not support spread
+    'prefer-spread': 0,
+
     // If your editor cannot find and show these to you, occasionally turn this off and run the
     // linter
     'no-warning-comments': 0,
