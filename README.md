@@ -31,7 +31,7 @@ This library aims to provide an abstraction layer between your application/libra
 ## Adapters
 
 | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] | [![Filesystem][fs-icon]][ns-fs] |
-|-------------------------|-------------------------------------|---------------------------------|
+|:-----------------------:|:-----------------------------------:|:-------------------------------:|
 | Amazon S3               | GridFS (WIP)                        | Local Filesystem                |
 
 ## Usage
