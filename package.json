@@ -6,10 +6,10 @@
     "name": "Robert Rossmann",
     "email": "rr.rossmann@me.com"
   },
-  "contributors": [],
   "bugs": {
     "url": "https://github.com/nodestream/nodestream/issues"
   },
+  "contributors": [],
   "dependencies": {
     "mkdirp": "^0.5.1",
     "uuid": "^2.0.1"
@@ -30,10 +30,10 @@
   },
   "homepage": "https://github.com/nodestream/nodestream",
   "keywords": [
+    "download",
     "stream",
     "streaming",
-    "upload",
-    "download"
+    "upload"
   ],
   "license": "BSD-3-Clause",
   "main": "lib/nodestream",
