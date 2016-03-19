@@ -3,10 +3,10 @@
 module.exports = {
 
   extends: [
-    'javascript/environments/nodejs/latest',
-    'javascript/environments/nodejs/best-practices',
-    'javascript/environments/nodejs/optional',
-    'javascript/coding-styles/base'
+    '@strv/javascript/environments/nodejs/latest',
+    '@strv/javascript/environments/nodejs/best-practices',
+    '@strv/javascript/environments/nodejs/optional',
+    '@strv/javascript/coding-styles/base'
   ],
 
   rules: {
