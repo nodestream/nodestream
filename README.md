@@ -26,13 +26,13 @@
 
 ## Description
 
-This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS, Azure Blob Store, etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.
+This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.
 
 ## Adapters
 
-| [![Filesystem][fs-icon]][ns-fs] | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] |
-|---------------------------------|-------------------------|-------------------------------------|
-| Local Filesystem                | Amazon S3               | GridFS (WIP)                        |
+| [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] | [![Filesystem][fs-icon]][ns-fs] |
+|-------------------------|-------------------------------------|---------------------------------|
+| Amazon S3               | GridFS (WIP)                        | Local Filesystem                |
 
 ## Usage
 
