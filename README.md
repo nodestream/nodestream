@@ -11,6 +11,8 @@
 [fs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901081/d81b824c-ee17-11e5-8fbe-40eff40646f7.png
 [ns-s3]: https://github.com/nodestream/nodestream-s3
 [s3-icon]: https://cloud.githubusercontent.com/assets/3058150/13901098/80692616-ee18-11e5-98c1-91c35b936c51.png
+[ns-gridfs]: https://github.com/nodestream/nodestream-gridfs
+[gridfs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901696/59652146-ee2c-11e5-8c7e-3cba5ba9854c.png
 
 # Nodestream
 
@@ -28,9 +30,9 @@ This library aims to provide an abstraction layer between your application/libra
 
 ## Adapters
 
-| [![Filesystem][fs-icon]][ns-fs] | [![S3][s3-icon]][ns-s3] |
-|---------------------------------|-------------------------|
-| Local Filesystem                | Amazon S3               |
+| [![Filesystem][fs-icon]][ns-fs] | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] |
+|---------------------------------|-------------------------|-------------------------------------|
+| Local Filesystem                | Amazon S3               | GridFS (WIP)                        |
 
 ## Usage
 
