@@ -18,10 +18,20 @@
 [inch-badge]: http://inch-ci.org/github/nodestream/nodestream.svg
 [inch-url]: http://inch-ci.org/github/nodestream/nodestream
 [make-badge]: https://img.shields.io/badge/built%20with-GNU%20Make-brightgreen.svg
+[ns-fs]: https://github.com/nodestream/nodestream-filesystem
+[fs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901081/d81b824c-ee17-11e5-8fbe-40eff40646f7.png
+[ns-s3]: https://github.com/nodestream/nodestream-s3
+[s3-icon]: https://cloud.githubusercontent.com/assets/3058150/13901098/80692616-ee18-11e5-98c1-91c35b936c51.png
 
 ## Description
 
 This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS, Azure Blob Store, etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.
+
+## Adapters
+
+| [![Filesystem][fs-icon]][ns-fs] | [![S3][s3-icon]][ns-s3] |
+|---------------------------------|-------------------------|
+| Local Filesystem                | Amazon S3               |
 
 ## Usage
 
