@@ -55,6 +55,11 @@ describe('Class: Nodestream', function() {
     return new Nodestream({ adapter: DummyAdapter, config: testOpts })
   })
 
+  it('should attempt to require the adapter if only the adapter\'s name is given', function() {
+    expect(() => new Nodestream({ adapter: 'filesystem' }))
+    .to.throw(/Cannot find filesystem adapter/)
+  })
+
 
   describe('.upload()', function() {
 
@@ -198,6 +203,11 @@ describe('Class: Nodestream', function() {
 
       expect(() => storage.addTransform('upload', DummyTransform)).to.not.throw()
       expect(() => storage.addTransform('upload', DummyCtor)).to.not.throw()
+    })
+
+    it("should attempt to require the transform if only the transform's name is given", function() {
+      expect(() => storage.addTransform('upload', 'checksum'))
+      .to.throw(/Cannot find checksum transform/)
     })
 
     it('should reject invalid direction', function() {

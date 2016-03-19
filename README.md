@@ -51,14 +51,16 @@ Let's create and configure a nodestream instance with which your application can
 ```js
 // Require the main Nodestream class
 const Nodestream = require('nodestream')
-const path = require('path')
 const nodestream = new Nodestream({
   // This tells nodestream which storage system it should interact with
-  adapter: require('nodestream-filesystem'),
+  // Under the hood, it will try to require `nodestream-filesystem` module
+  adapter: 'filesystem',
   // This object is always specific to your adapter of choice - always check
   // the documentation for that adapter for available options
   config: {
-    root: path.join(__dirname, '.storage')
+    // You MUST provide either an absolute path or nothing at all
+    // You can use array notation, the parts will be joined for you
+    root: [__dirname, '.storage']
   }
 })
 
@@ -146,14 +148,13 @@ Nodestream supports a feature called transforms. In principle, a transform is ju
 When you configure your Nodestream instance, you should register transforms using the `.addTransform()` function.
 
 ```js
-const compress = require('nodestream-compress-transform')
-
 // The first argument defines when the transform should be applied ('upload', 'download')
-// The second argument is the actual implmentation and the third argument is
-// an option configuration object which will be passed as-is to the transform stream
-// when the time comes to use the transform.
-nodestream.addTransform('upload', compress, { mode: 'compress' })
-nodestream.addTransform('download', compress, { mode: 'decompress' })
+// The second argument is the transform's name - Nodestream will attempt to require
+// `nodestream-transform-compress` under the hood, so make sure you have it installed!
+// The third argument is an option configuration object which will be passed as-is to
+// the transform stream when the time comes to use the transform.
+nodestream.addTransform('upload', 'compress', { mode: 'compress' })
+nodestream.addTransform('download', 'compress', { mode: 'decompress' })
 ```
 
 Now, every time you call `.upload()` or `.download()`, the respective transform will be applied on the stream.
