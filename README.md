@@ -65,7 +65,6 @@ const nodestream = new Nodestream({
     root: [__dirname, '.storage']
   }
 })
-
 ```
 
 Great! At this point, nodestream is ready to transfer some bytes!
