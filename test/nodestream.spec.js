@@ -122,6 +122,18 @@ describe('Class: Nodestream', function() {
         expect(results).to.have.property('location', '/a/b/c')
       })
     })
+
+    it('should return ES 2015 Promise', function() {
+      // Return a promise-like object
+      const stupidPromise = {
+        then: () => stupidPromise,
+        catch: () => {}
+      }
+
+      DummyAdapter.prototype.upload = () => stupidPromise
+
+      expect(storage.upload(dummyFile)).to.be.instanceof(Promise)
+    })
   })
 
 
