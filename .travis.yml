@@ -12,6 +12,7 @@ script:
 - make test
 after_success:
 - make coveralls
+- '[[ -n "$TRAVIS_TAG" ]] && make gh-pages'
 deploy:
   provider: npm
   email: rr.rossmann@gmail.com
