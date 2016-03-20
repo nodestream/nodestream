@@ -154,12 +154,9 @@ describe('Class: Nodestream', function() {
       storage.download('test/file.txt')
     })
 
-    it('should return whatever the adapter returns', function() {
-      const retVal = {}
+    it('should return ES 2015 Promise', function() {
 
-      DummyAdapter.prototype.download = () => retVal
-
-      expect(storage.download('/test/file.txt')).to.equal(retVal)
+      expect(storage.download('/test/file.txt')).to.be.instanceof(Promise)
     })
   })
 
@@ -181,12 +178,10 @@ describe('Class: Nodestream', function() {
       storage.remove('test/file.txt')
     })
 
-    it('should return whatever the adapter returns', function() {
-      const retVal = {}
+    it('should return ES 2015 Promise', function() {
+      DummyAdapter.prototype.remove = () => ({})
 
-      DummyAdapter.prototype.remove = () => retVal
-
-      expect(storage.remove('/test/file.txt')).to.equal(retVal)
+      expect(storage.remove('/test/file.txt')).to.be.instanceof(Promise)
     })
   })
 
