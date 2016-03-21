@@ -107,21 +107,22 @@ Congratulations, you just uploaded your first file!
 
 #### Downloading
 
-Downloading a file is quite straight-forward - all you need is the file's location as returned by the `upload()` method. You will always get back a readable stream which you can then `.pipe()` to something. Again, Nodestream does not care where you are sending the bytes, be it local filesystem, an http response or even a different Nodestream instance (ie. S3 to GridFS transfer).
+Downloading a file is quite straight-forward - all you need is the file's location as returned by the `upload()` method and a destination stream to which you want to send the data. This can be any valid writable stream. Again, Nodestream does not care where you are sending the bytes, be it local filesystem, an http response or even a different Nodestream instance (ie. S3 to GridFS transfer).
 
 ```js
-// We are hardcoding the location here, but you will probably want to
-// retrieve the file's location from a database
-const file = nodestream.download('avatars/user-123.png')
-
 // Let's create a destination for the download
 const fs = require('fs')
 const destination = fs.createWriteStream('/users/me/downloads/picture.png')
 
-// Since file is a readable stream, we can pipe it to any other writable
-// stream we like
-file.pipe(destination)
-file.once('end', () => console.log('all bytes sent to destination!'))
+// We are hardcoding the location here, but you will probably want to
+// retrieve the file's location from a database
+nodestream.download('avatars/user-123.png', destination)
+.then(() => {
+  // All good, destination received all the data!
+})
+.catch(err => {
+  // Oh well...
+})
 ```
 
 #### Removing

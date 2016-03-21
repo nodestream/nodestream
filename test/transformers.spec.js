@@ -90,15 +90,18 @@ describe('Feature: Transformers', function() {
     })
 
 
-    it('should pass the file to all transforms', function(done) {
+    it('should pass the file to all transforms', function() {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
-      const file = storage.download('/a/b/c')
 
-      file.once('finish', () => {
+      return storage.download('/a/b/c', new stream.PassThrough())
+      .then(() => {
         spy.restore()
         expect(spy.callCount).to.equal(1)
+      })
+      .catch(err => {
+        spy.restore()
 
-        return done()
+        throw err
       })
     })
 
