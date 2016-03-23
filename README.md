@@ -34,7 +34,7 @@ This library aims to provide an abstraction layer between your application/libra
 
 | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] | [![GCS][gcs-icon]][ns-gcs] | [![Filesystem][fs-icon]][ns-fs] |
 |:-----------------------:|:-----------------------------------:|:--------------------------:|:-------------------------------:|
-| Amazon S3               | GridFS (WIP)                        | Google Cloud Storage (WIP) | Local Filesystem                |
+| Amazon S3               | GridFS (WIP)                        | Google Cloud Storage       | Local Filesystem                |
 
 ## Usage
 
