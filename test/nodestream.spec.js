@@ -124,6 +124,19 @@ describe('Class: Nodestream', function() {
     it('should return ES 2015 Promise', function() {
       expect(storage.upload(dummyFile)).to.be.instanceof(Promise)
     })
+
+    it('should pass adapter-specific options to the adapter', function() {
+      setImmediate(() => dummyFile.end())
+
+      DummyAdapter.prototype.createWriteStream = (location, options) => {
+        expect(options).to.be.an('object')
+        expect(options.test).to.equal(true)
+
+        return new stream.PassThrough()
+      }
+
+      return storage.upload(dummyFile, { dummy: { test: true } })
+    })
   })
 
 
