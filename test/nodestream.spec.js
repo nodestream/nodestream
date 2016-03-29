@@ -18,6 +18,7 @@ describe('Class: Nodestream', function() {
 
   beforeEach(function() {
     DummyAdapter = function() {}
+    DummyAdapter.identity = 'dummy'
     DummyAdapter.prototype.createWriteStream = () => new stream.PassThrough()
     DummyAdapter.prototype.createReadStream = () => new stream.PassThrough()
 
@@ -34,6 +35,12 @@ describe('Class: Nodestream', function() {
     expect(() => new Nodestream({})).to.throw(TypeError)
   })
 
+  it('should throw when the adapter does not declare its identity', function() {
+    delete DummyAdapter.identity
+
+    expect(() => new Nodestream({ adapter: DummyAdapter })).to.throw(ReferenceError)
+  })
+
   it('should instantiate the adapter', function(done) {
     DummyAdapter = function() {
       // eslint-disable-next-line no-invalid-this
@@ -41,6 +48,7 @@ describe('Class: Nodestream', function() {
 
       return done()
     }
+    DummyAdapter.identity = 'dummy'
 
     return new Nodestream({ adapter: DummyAdapter })
   })
@@ -51,6 +59,7 @@ describe('Class: Nodestream', function() {
     DummyAdapter = function(options) {
       expect(options).to.equal(testOpts)
     }
+    DummyAdapter.identity = 'dummy'
 
     return new Nodestream({ adapter: DummyAdapter, config: testOpts })
   })
