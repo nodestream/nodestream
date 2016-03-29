@@ -13,7 +13,6 @@ const Nodestream = require('../lib/nodestream')
 const stream = require('stream')
 
 describe('Class: Nodestream', function() {
-
   let DummyAdapter
   let storage
 
@@ -63,7 +62,6 @@ describe('Class: Nodestream', function() {
 
 
   describe('.upload()', function() {
-
     let dummyFile
 
     beforeEach(function() {
@@ -139,7 +137,6 @@ describe('Class: Nodestream', function() {
 
 
   describe('.download()', function() {
-
     it('should be function', function() {
       expect(storage).to.have.property('download')
       expect(storage.download).to.be.a('function')
@@ -156,7 +153,6 @@ describe('Class: Nodestream', function() {
     })
 
     it('should return ES 2015 Promise', function() {
-
       expect(storage.download('/test/file.txt')).to.be.instanceof(Promise)
     })
 
@@ -204,7 +200,6 @@ describe('Class: Nodestream', function() {
 
 
   describe('.remove()', function() {
-
     it('should be function', function() {
       expect(storage).to.have.property('remove')
       expect(storage.remove).to.be.a('function')
@@ -229,7 +224,6 @@ describe('Class: Nodestream', function() {
 
 
   describe('.addTransform()', function() {
-
     class DummyTransform {
       static get identity() {
         return 'testidentity'

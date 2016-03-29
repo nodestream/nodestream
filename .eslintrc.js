@@ -1,3 +1,11 @@
+/**
+ * Nodestream
+ *
+ * @author      Robert Rossmann <robert.rossmann@me.com>
+ * @copyright   2016 Robert Rossmann
+ * @license     BSD-3-Clause
+ */
+
 'use strict'
 
 module.exports = {
@@ -12,15 +20,7 @@ module.exports = {
   rules: {
     // Node.js 4 does not support spread
     'prefer-spread': 0,
-
-    // If your editor cannot find and show these to you, occasionally turn this off and run the
-    // linter
-    'no-warning-comments': 0,
-
-    // Some deviations from the defined coding style
-    'padded-blocks': 0,
-    curly: [1, 'multi'],
-    'newline-per-chained-call': 0,
-    'space-unary-ops': 0
+    // If your editor cannot show these to you, occasionally turn this off and run the linter
+    'no-warning-comments': 0
   }
 }

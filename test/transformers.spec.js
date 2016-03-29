@@ -15,7 +15,6 @@ const Nodestream = require('../lib/nodestream')
 
 
 describe('Feature: Transformers', function() {
-
   let DummyTransform
   let storage
 
@@ -43,7 +42,6 @@ describe('Feature: Transformers', function() {
 
 
   describe('Uploading', function() {
-
     beforeEach(function() {
       storage.addTransform('upload', DummyTransform)
     })
@@ -84,7 +82,6 @@ describe('Feature: Transformers', function() {
 
 
   describe('Downloading', function() {
-
     beforeEach(function() {
       storage.addTransform('download', DummyTransform)
     })
