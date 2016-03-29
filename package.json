@@ -11,7 +11,6 @@
   },
   "contributors": [],
   "dependencies": {
-    "mkdirp": "^0.5.1",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
