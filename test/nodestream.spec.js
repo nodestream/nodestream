@@ -18,8 +18,8 @@ describe('Class: Nodestream', function() {
 
   beforeEach(function() {
     DummyAdapter = function() {}
-    DummyAdapter.prototype.upload = () => Promise.resolve('/a/b/c')
-    DummyAdapter.prototype.download = () => new stream.Readable()
+    DummyAdapter.prototype.createWriteStream = () => new stream.PassThrough()
+    DummyAdapter.prototype.createReadStream = () => new stream.PassThrough()
 
     storage = new Nodestream({ adapter: DummyAdapter })
   })
@@ -65,23 +65,13 @@ describe('Class: Nodestream', function() {
     let dummyFile
 
     beforeEach(function() {
-      dummyFile = new stream.Readable()
+      dummyFile = new stream.PassThrough()
     })
 
 
     it('should be function', function() {
       expect(storage).to.have.property('upload')
       expect(storage.upload).to.be.a('function')
-    })
-
-    it('should normalise options into object if not provided', function() {
-      DummyAdapter.prototype.upload = (file, options) => {
-        expect(options).to.be.instanceof(Object)
-
-        return Promise.resolve('a/b/c')
-      }
-
-      return storage.upload(dummyFile)
     })
 
     it('should reject files which are not readable streams', function() {
@@ -94,43 +84,35 @@ describe('Class: Nodestream', function() {
     })
 
     it('should generate a unique name if no name is provided', function() {
-      DummyAdapter.prototype.upload = (file, options) => {
-        expect(options).to.have.ownProperty('name')
-        expect(options.name).to.be.a('string')
-
-        return Promise.resolve('/a/b/c')
-      }
+      setImmediate(() => dummyFile.end())
 
       return storage.upload(dummyFile, {})
+      .then(results => {
+        expect(results.location).to.be.a('string')
+      })
     })
 
     it('should not replace the name if it was specified as string', function() {
-      DummyAdapter.prototype.upload = (file, options) => {
-        expect(options.name).to.equal('testfile')
-
-        return Promise.resolve('/a/b/c')
-      }
+      setImmediate(() => dummyFile.end())
 
       return storage.upload(dummyFile, { name: 'testfile' })
+      .then(results => {
+        expect(results).to.have.property('location')
+        expect(results.location).to.equal('testfile')
+      })
     })
 
     it('should return the file location as a key named location', function() {
+      setImmediate(() => dummyFile.end())
+
       return storage.upload(dummyFile)
       .then(results => {
         expect(results).to.be.an('object')
-        expect(results).to.have.property('location', '/a/b/c')
+        expect(results).to.have.property('location').and.be.a('string')
       })
     })
 
     it('should return ES 2015 Promise', function() {
-      // Return a promise-like object
-      const stupidPromise = {
-        then: () => stupidPromise,
-        catch: () => {}
-      }
-
-      DummyAdapter.prototype.upload = () => stupidPromise
-
       expect(storage.upload(dummyFile)).to.be.instanceof(Promise)
     })
   })
@@ -143,7 +125,7 @@ describe('Class: Nodestream', function() {
     })
 
     it('should pass the location to the adapter', function(done) {
-      DummyAdapter.prototype.download = location => {
+      DummyAdapter.prototype.createReadStream = location => {
         expect(location).to.equal('test/file.txt')
 
         return done()
@@ -157,9 +139,14 @@ describe('Class: Nodestream', function() {
     })
 
     it('should reject if the source emits error', function(done) {
-      const source = new stream.PassThrough()
+      DummyAdapter.prototype.createReadStream = () => {
+        const source = new stream.PassThrough()
 
-      DummyAdapter.prototype.download = () => source
+        setImmediate(() => source.emit('error', new Error('fail')))
+
+        return source
+      }
+
       storage.download('/a/b/c', new stream.PassThrough())
       .then(() => done(new Error('Download should have been rejected')))
       .catch(err => {
@@ -167,15 +154,15 @@ describe('Class: Nodestream', function() {
 
         return done()
       })
-
-      setImmediate(() => source.emit('error', new Error('fail')))
     })
 
     it('should reject if the target emits error', function(done) {
       const source = new stream.PassThrough()
       const target = new stream.PassThrough()
 
-      DummyAdapter.prototype.download = () => source
+      DummyAdapter.prototype.createReadStream = () => source
+      setImmediate(() => target.emit('error', new Error('fail')))
+
       storage.download('/a/b/c', target)
       .then(() => done(new Error('Download should have been rejected')))
       .catch(err => {
@@ -183,15 +170,13 @@ describe('Class: Nodestream', function() {
 
         return done()
       })
-
-      setImmediate(() => target.emit('error', new Error('fail')))
     })
 
     it('should resolve when the target emits finish', function() {
       const source = new stream.PassThrough()
       const target = new stream.PassThrough()
 
-      DummyAdapter.prototype.download = () => source
+      DummyAdapter.prototype.createReadStream = () => source
       setImmediate(() => source.end('all done'))
 
       return storage.download('/a/b/c', target)

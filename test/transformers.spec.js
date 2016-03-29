@@ -20,8 +20,8 @@ describe('Feature: Transformers', function() {
 
   beforeEach(function() {
     function DummyAdapter() {}
-    DummyAdapter.prototype.upload = () => Promise.resolve('/a/b/c')
-    DummyAdapter.prototype.download = () => {
+    DummyAdapter.prototype.createWriteStream = () => new stream.PassThrough()
+    DummyAdapter.prototype.createReadStream = () => {
       const file = new stream.PassThrough()
 
       setImmediate(() => {
