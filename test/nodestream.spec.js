@@ -137,6 +137,36 @@ describe('Class: Nodestream', function() {
 
       return storage.upload(dummyFile, { dummy: { test: true } })
     })
+
+    it('should reject if the destination emits error', function(done) {
+      DummyAdapter.prototype.createWriteStream = () => {
+        const destination = new stream.PassThrough()
+
+        setImmediate(() => destination.emit('error', new Error('fail')))
+
+        return destination
+      }
+
+      storage.upload(dummyFile)
+      .then(() => done(new Error('Upload should have been rejected')))
+      .catch(err => {
+        expect(err.message).to.equal('fail')
+
+        return done()
+      })
+    })
+
+    it('should reject if the source emits error', function(done) {
+      storage.upload(dummyFile)
+      .then(() => done(new Error('Download should have been rejected')))
+      .catch(err => {
+        expect(err.message).to.equal('fail')
+
+        return done()
+      })
+
+      setImmediate(() => dummyFile.emit('error', new Error('fail')))
+    })
   })
 
 
@@ -153,7 +183,7 @@ describe('Class: Nodestream', function() {
         return done()
       }
 
-      storage.download('test/file.txt')
+      storage.download('test/file.txt', new stream.PassThrough())
     })
 
     it('should return ES 2015 Promise', function() {
