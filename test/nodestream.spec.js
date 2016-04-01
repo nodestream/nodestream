@@ -241,6 +241,15 @@ describe('Class: Nodestream', function() {
       return storage.download('/a/b/c', dummyDest)
     })
 
+    it('should resolve with an object containing the download results', function() {
+      setImmediate(() => dummyDest.end())
+
+      return storage.download('/a/b/c', dummyDest)
+      .then(results => {
+        expect(results).to.be.an('object')
+      })
+    })
+
     it('should throw a TypeError if location is not string', function() {
       expect(() => storage.download(123, dummyDest)).to.throw(TypeError)
     })
