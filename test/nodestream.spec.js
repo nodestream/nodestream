@@ -21,6 +21,7 @@ describe('Class: Nodestream', function() {
     DummyAdapter.identity = 'dummy'
     DummyAdapter.prototype.createWriteStream = () => new stream.PassThrough()
     DummyAdapter.prototype.createReadStream = () => new stream.PassThrough()
+    DummyAdapter.prototype.remove = () => {}
 
     storage = new Nodestream({ adapter: DummyAdapter })
   })
@@ -171,6 +172,13 @@ describe('Class: Nodestream', function() {
 
 
   describe('.download()', function() {
+    let dummyDest
+
+    beforeEach(function() {
+      dummyDest = new stream.PassThrough()
+    })
+
+
     it('should be function', function() {
       expect(storage).to.have.property('download')
       expect(storage.download).to.be.a('function')
@@ -187,7 +195,7 @@ describe('Class: Nodestream', function() {
     })
 
     it('should return ES 2015 Promise', function() {
-      expect(storage.download('/test/file.txt')).to.be.instanceof(Promise)
+      expect(storage.download('/test/file.txt', dummyDest)).to.be.instanceof(Promise)
     })
 
     it('should reject if the source emits error', function(done) {
@@ -199,7 +207,7 @@ describe('Class: Nodestream', function() {
         return source
       }
 
-      storage.download('/a/b/c', new stream.PassThrough())
+      storage.download('/a/b/c', dummyDest)
       .then(() => done(new Error('Download should have been rejected')))
       .catch(err => {
         expect(err.message).to.equal('fail')
@@ -226,12 +234,19 @@ describe('Class: Nodestream', function() {
 
     it('should resolve when the target emits finish', function() {
       const source = new stream.PassThrough()
-      const target = new stream.PassThrough()
 
       DummyAdapter.prototype.createReadStream = () => source
       setImmediate(() => source.end('all done'))
 
-      return storage.download('/a/b/c', target)
+      return storage.download('/a/b/c', dummyDest)
+    })
+
+    it('should throw a TypeError if location is not string', function() {
+      expect(() => storage.download(123, dummyDest)).to.throw(TypeError)
+    })
+
+    it('should throw a TypeError if destination is not writable stream', function() {
+      expect(() => storage.download('/a/b/c', new stream.Readable())).to.throw(TypeError)
     })
   })
 
@@ -256,6 +271,10 @@ describe('Class: Nodestream', function() {
       DummyAdapter.prototype.remove = () => ({})
 
       expect(storage.remove('/test/file.txt')).to.be.instanceof(Promise)
+    })
+
+    it('should throw a TypeError if location is not string', function() {
+      expect(() => storage.remove(123)).to.throw(TypeError)
     })
   })
 

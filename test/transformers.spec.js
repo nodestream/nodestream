@@ -114,7 +114,7 @@ describe('Feature: Transformers', function() {
       DummyTransform.prototype.results = () => true
 
       storage.addTransform('download', DummyTransform, config)
-      storage.download('/a/b/c')
+      storage.download('/a/b/c', new stream.PassThrough())
     })
   })
 })
