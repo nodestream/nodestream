@@ -79,6 +79,21 @@ describe('Feature: Transformers', function() {
 
       storage.upload(file)
     })
+
+    it('should gather transformation results and publish it to the results object', function() {
+      const file = new stream.PassThrough()
+
+      setImmediate(() => {
+        file.write('hello world')
+        file.end()
+      })
+
+      return storage.upload(file)
+      .then(results => {
+        expect(results).to.have.property('testidentity')
+        expect(results.testidentity).to.equal(true)
+      })
+    })
   })
 
 
@@ -115,6 +130,14 @@ describe('Feature: Transformers', function() {
 
       storage.addTransform('download', DummyTransform, config)
       storage.download('/a/b/c', new stream.PassThrough())
+    })
+
+    it('should gather transformation results and publish it to the results object', function() {
+      return storage.download('/a/b/c', new stream.PassThrough())
+      .then(results => {
+        expect(results).to.have.property('testidentity')
+        expect(results.testidentity).to.equal(true)
+      })
     })
   })
 })
