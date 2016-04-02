@@ -250,6 +250,19 @@ describe('Class: Nodestream', function() {
       })
     })
 
+    it('should pass adapter-specific options to the adapter', function() {
+      setImmediate(() => dummyDest.end())
+
+      DummyAdapter.prototype.createReadStream = (location, options) => {
+        expect(options).to.be.an('object')
+        expect(options.test).to.equal(true)
+
+        return new stream.PassThrough()
+      }
+
+      return storage.download('/a/b/c', dummyDest, { dummy: { test: true } })
+    })
+
     it('should throw a TypeError if location is not string', function() {
       expect(() => storage.download(123, dummyDest)).to.throw(TypeError)
     })
