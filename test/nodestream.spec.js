@@ -76,6 +76,7 @@ describe('Class: Nodestream', function() {
 
     beforeEach(function() {
       dummyFile = new stream.PassThrough()
+      setImmediate(() => dummyFile.end())
     })
 
 
@@ -94,8 +95,6 @@ describe('Class: Nodestream', function() {
     })
 
     it('should generate a unique name if no name is provided', function() {
-      setImmediate(() => dummyFile.end())
-
       return storage.upload(dummyFile, {})
       .then(results => {
         expect(results.location).to.be.a('string')
@@ -103,8 +102,6 @@ describe('Class: Nodestream', function() {
     })
 
     it('should not replace the name if it was specified as string', function() {
-      setImmediate(() => dummyFile.end())
-
       return storage.upload(dummyFile, { name: 'testfile' })
       .then(results => {
         expect(results).to.have.property('location')
@@ -113,8 +110,6 @@ describe('Class: Nodestream', function() {
     })
 
     it('should return the file location as a key named location', function() {
-      setImmediate(() => dummyFile.end())
-
       return storage.upload(dummyFile)
       .then(results => {
         expect(results).to.be.an('object')
@@ -127,8 +122,6 @@ describe('Class: Nodestream', function() {
     })
 
     it('should pass adapter-specific options to the adapter', function() {
-      setImmediate(() => dummyFile.end())
-
       DummyAdapter.prototype.createWriteStream = (location, options) => {
         expect(options).to.be.an('object')
         expect(options.test).to.equal(true)
@@ -186,16 +179,16 @@ describe('Class: Nodestream', function() {
 
     it('should pass the location to the adapter', function(done) {
       DummyAdapter.prototype.createReadStream = location => {
-        expect(location).to.equal('test/file.txt')
+        expect(location).to.equal('fake/location')
 
         return done()
       }
 
-      storage.download('test/file.txt', new stream.PassThrough())
+      storage.download('fake/location', new stream.PassThrough())
     })
 
     it('should return ES 2015 Promise', function() {
-      expect(storage.download('/test/file.txt', dummyDest)).to.be.instanceof(Promise)
+      expect(storage.download('fake/location', dummyDest)).to.be.instanceof(Promise)
     })
 
     it('should reject if the source emits error', function(done) {
@@ -207,7 +200,7 @@ describe('Class: Nodestream', function() {
         return source
       }
 
-      storage.download('/a/b/c', dummyDest)
+      storage.download('fake/location', dummyDest)
       .then(() => done(new Error('Download should have been rejected')))
       .catch(err => {
         expect(err.message).to.equal('fail')
@@ -217,13 +210,11 @@ describe('Class: Nodestream', function() {
     })
 
     it('should reject if the target emits error', function(done) {
-      const source = new stream.PassThrough()
       const target = new stream.PassThrough()
 
-      DummyAdapter.prototype.createReadStream = () => source
       setImmediate(() => target.emit('error', new Error('fail')))
 
-      storage.download('/a/b/c', target)
+      storage.download('fake/location', target)
       .then(() => done(new Error('Download should have been rejected')))
       .catch(err => {
         expect(err.message).to.equal('fail')
@@ -232,19 +223,19 @@ describe('Class: Nodestream', function() {
       })
     })
 
-    it('should resolve when the target emits finish', function() {
+    it('should resolve when the source stream ends', function() {
       const source = new stream.PassThrough()
 
       DummyAdapter.prototype.createReadStream = () => source
       setImmediate(() => source.end('all done'))
 
-      return storage.download('/a/b/c', dummyDest)
+      return storage.download('fake/location', dummyDest)
     })
 
     it('should resolve with an object containing the download results', function() {
       setImmediate(() => dummyDest.end())
 
-      return storage.download('/a/b/c', dummyDest)
+      return storage.download('fake/location', dummyDest)
       .then(results => {
         expect(results).to.be.an('object')
       })
@@ -260,7 +251,7 @@ describe('Class: Nodestream', function() {
         return new stream.PassThrough()
       }
 
-      return storage.download('/a/b/c', dummyDest, { dummy: { test: true } })
+      return storage.download('fake/location', dummyDest, { dummy: { test: true } })
     })
 
     it('should throw a TypeError if location is not string', function() {
@@ -268,7 +259,7 @@ describe('Class: Nodestream', function() {
     })
 
     it('should throw a TypeError if destination is not writable stream', function() {
-      expect(() => storage.download('/a/b/c', new stream.Readable())).to.throw(TypeError)
+      expect(() => storage.download('fake/location', new stream.Readable())).to.throw(TypeError)
     })
   })
 
@@ -279,20 +270,18 @@ describe('Class: Nodestream', function() {
       expect(storage.remove).to.be.a('function')
     })
 
-    it('should pass the location to the adapter', function(done) {
+    it('should pass the location to the adapter', function() {
       DummyAdapter.prototype.remove = location => {
-        expect(location).to.equal('test/file.txt')
-
-        return done()
+        expect(location).to.equal('fake/location')
       }
 
-      storage.remove('test/file.txt')
+      return storage.remove('fake/location')
     })
 
     it('should return ES 2015 Promise', function() {
       DummyAdapter.prototype.remove = () => ({})
 
-      expect(storage.remove('/test/file.txt')).to.be.instanceof(Promise)
+      expect(storage.remove('fake/location')).to.be.instanceof(Promise)
     })
 
     it('should throw a TypeError if location is not string', function() {

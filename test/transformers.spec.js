@@ -17,6 +17,7 @@ const Nodestream = require('../lib/nodestream')
 describe('Feature: Transformers', function() {
   let DummyTransform
   let storage
+  let dummyFile
 
   beforeEach(function() {
     function DummyAdapter() {}
@@ -38,6 +39,12 @@ describe('Feature: Transformers', function() {
     DummyTransform.prototype.transform = file => file
     DummyTransform.prototype.results = () => true
 
+    dummyFile = new stream.PassThrough()
+    setImmediate(() => {
+      dummyFile.write('hello world')
+      dummyFile.end()
+    })
+
     storage = new Nodestream({ adapter: DummyAdapter })
   })
 
@@ -50,14 +57,8 @@ describe('Feature: Transformers', function() {
 
     it('should pass the file to all transforms', function() {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
-      const file = new stream.PassThrough()
 
-      setImmediate(() => {
-        file.write('hello world')
-        file.end()
-      })
-
-      return storage.upload(file)
+      return storage.upload(dummyFile)
       .then(() => {
         spy.restore()
         expect(spy.callCount).to.equal(1)
@@ -75,20 +76,12 @@ describe('Feature: Transformers', function() {
       DummyTransform.prototype.results = () => true
 
       storage.addTransform('upload', DummyTransform, config)
-      const file = new stream.PassThrough()
 
-      storage.upload(file)
+      storage.upload(dummyFile)
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      const file = new stream.PassThrough()
-
-      setImmediate(() => {
-        file.write('hello world')
-        file.end()
-      })
-
-      return storage.upload(file)
+      return storage.upload(dummyFile)
       .then(results => {
         expect(results).to.have.property('testidentity')
         expect(results.testidentity).to.equal(true)
@@ -106,7 +99,7 @@ describe('Feature: Transformers', function() {
     it('should pass the file to all transforms', function() {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
 
-      return storage.download('/a/b/c', new stream.PassThrough())
+      return storage.download('fake/location', new stream.PassThrough())
       .then(() => {
         spy.restore()
         expect(spy.callCount).to.equal(1)
@@ -129,11 +122,11 @@ describe('Feature: Transformers', function() {
       DummyTransform.prototype.results = () => true
 
       storage.addTransform('download', DummyTransform, config)
-      storage.download('/a/b/c', new stream.PassThrough())
+      storage.download('fake/location', new stream.PassThrough())
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      return storage.download('/a/b/c', new stream.PassThrough())
+      return storage.download('fake/location', new stream.PassThrough())
       .then(results => {
         expect(results).to.have.property('testidentity')
         expect(results.testidentity).to.equal(true)
