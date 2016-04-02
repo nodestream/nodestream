@@ -63,6 +63,11 @@ describe('Feature: Transformers', function() {
         spy.restore()
         expect(spy.callCount).to.equal(1)
       })
+      .catch(err => {
+        spy.restore()
+
+        throw err
+      })
     })
 
     it('should pass the configuration object to the transformer', function() {
@@ -81,11 +86,8 @@ describe('Feature: Transformers', function() {
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      return storage.upload(dummyFile)
-      .then(results => {
-        expect(results).to.have.property('testidentity')
-        expect(results.testidentity).to.equal(true)
-      })
+      return expect(storage.upload(dummyFile))
+      .to.eventually.have.property('testidentity').and.to.equal(true)
     })
   })
 
@@ -126,11 +128,8 @@ describe('Feature: Transformers', function() {
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      return storage.download('fake/location', new stream.PassThrough())
-      .then(results => {
-        expect(results).to.have.property('testidentity')
-        expect(results.testidentity).to.equal(true)
-      })
+      return expect(storage.download('fake/location', new stream.PassThrough()))
+      .to.eventually.have.property('testidentity').and.to.equal(true)
     })
   })
 })
