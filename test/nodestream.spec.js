@@ -96,7 +96,7 @@ describe('Class: Nodestream', function() {
 
     it('should not replace the name if it was specified as string', function() {
       return expect(storage.upload(dummyFile, { name: 'testfile' }))
-      .to.eventually.deep.equal({ location: 'testfile' })
+      .to.eventually.have.property('location', 'testfile')
     })
 
     it('should generate a unique name if no name is provided', function() {
