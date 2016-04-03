@@ -89,6 +89,11 @@ describe('Feature: Transformers', function() {
       return expect(storage.upload(dummyFile))
       .to.eventually.have.property('testidentity').and.to.equal(true)
     })
+
+    it('should make the transform appear in the list of applied transforms', function() {
+      return expect(storage.upload(dummyFile))
+      .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
+    })
   })
 
 
@@ -130,6 +135,11 @@ describe('Feature: Transformers', function() {
     it('should gather transformation results and publish it to the results object', function() {
       return expect(storage.download('fake/location', new stream.PassThrough()))
       .to.eventually.have.property('testidentity').and.to.equal(true)
+    })
+
+    it('should make the transform appear in the list of applied transforms', function() {
+      return expect(storage.download('fake/location', new stream.PassThrough()))
+      .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
     })
   })
 })

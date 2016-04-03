@@ -137,6 +137,16 @@ describe('Class: Nodestream', function() {
 
       return expect(storage.upload(dummyFile)).to.eventually.be.rejectedWith(Error, 'fail')
     })
+
+    it('should resolve with an object containing the upload results', function() {
+      return expect(storage.upload(dummyFile, {}))
+      .to.eventually.have.all.keys('location', 'transforms', 'adapter')
+    })
+
+    it('should resolve with the name of the adapter used for upload', function() {
+      return expect(storage.upload(dummyFile, {}))
+      .to.eventually.have.property('adapter', DummyAdapter.identity)
+    })
   })
 
 
@@ -201,7 +211,15 @@ describe('Class: Nodestream', function() {
     it('should resolve with an object containing the download results', function() {
       setImmediate(() => dummyDest.end())
 
-      return expect(storage.download('fake/location', dummyDest)).to.eventually.be.an('object')
+      return expect(storage.download('fake/location', dummyDest))
+      .to.eventually.have.all.keys('location', 'transforms', 'adapter')
+    })
+
+    it('should resolve with the name of the adapter used for download', function() {
+      setImmediate(() => dummyDest.end())
+
+      return expect(storage.download('fake/location', dummyDest))
+      .to.eventually.have.property('adapter', DummyAdapter.identity)
     })
 
     it('should pass adapter-specific options to the adapter', function() {
