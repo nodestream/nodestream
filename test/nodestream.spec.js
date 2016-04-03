@@ -67,7 +67,7 @@ describe('Class: Nodestream', function() {
 
   it('should attempt to require the adapter if only the adapter\'s name is given', function() {
     expect(() => new Nodestream({ adapter: 'filesystem' }))
-    .to.throw(/Cannot find filesystem adapter/)
+    .to.throw(/Cannot find adapter package nodestream-filesystem/)
   })
 
 
