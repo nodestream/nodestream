@@ -298,7 +298,7 @@ describe('Class: Nodestream', function() {
 
     it("should attempt to require the transform if only the transform's name is given", function() {
       expect(() => storage.addTransform('upload', 'checksum'))
-      .to.throw(/Cannot find checksum transform/)
+      .to.throw(/Cannot find transform package nodestream-transform-checksum/)
     })
 
     it('should reject invalid direction', function() {
