@@ -33,7 +33,10 @@
     "download",
     "stream",
     "streaming",
-    "upload"
+    "upload",
+    "storage",
+    "blob",
+    "nodestream"
   ],
   "license": "BSD-3-Clause",
   "main": "lib/nodestream",
