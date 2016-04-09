@@ -15,6 +15,8 @@
 [gridfs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901696/59652146-ee2c-11e5-8c7e-3cba5ba9854c.png
 [ns-gcs]: https://github.com/nodestream/nodestream-gcs
 [gcs-icon]: https://cloud.githubusercontent.com/assets/3058150/13907413/bfb554e0-eeed-11e5-9e51-ce490fad8abd.png
+[ns-checksum]: https://github.com/nodestream/nodestream-transform-checksum
+[ns-compress]: https://github.com/nodestream/nodestream-transform-compress
 
 # Nodestream
 
@@ -30,11 +32,20 @@
 
 This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.
 
-## Adapters
+## Available adapters
 
 | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] | [![GCS][gcs-icon]][ns-gcs] | [![Filesystem][fs-icon]][ns-fs] |
 |:-----------------------:|:-----------------------------------:|:--------------------------:|:-------------------------------:|
 | Amazon S3               | GridFS (WIP)                        | Google Cloud Storage       | Local Filesystem                |
+
+
+## Available transforms
+
+> See [Transforms](#transforms) section for more info.
+
+| [checksum][ns-checksum] | [compress][ns-compress] | progress (WIP)   | crypto (WIP)           |
+|:-----------------------:|:-----------------------:|:----------------:|:----------------------:|
+| Checksum Calculator     | Stream (de)compressor   | Progress monitor | Stream (en/de)cryption |
 
 ## Usage
 
@@ -71,7 +82,7 @@ const nodestream = new Nodestream({
 
 Great! At this point, nodestream is ready to transfer some bytes!
 
-### Usage
+### Actions
 
 #### Uploading
 
@@ -139,15 +150,19 @@ nodestream.remove('avatars/user-123.png')
 })
 ```
 
-### Transforms
+## Transforms
 
-Nodestream supports a feature called transforms. In principle, a transform is just a function that modifies the incoming or outgoing bytes in some way, transparently for each stream passing through Nodestream. Some use cases:
+Nodestream supports a feature called transforms. In principle, a transform is just a function that acts somehow on (ie. modifies) the incoming or outgoing bytes, transparently, for each stream passing through Nodestream. Some use cases:
 
 - Calculating checksums
 - Compressing/decompressing data
 - Modifying the data completely, ie. appending headers/footers and whatnot
 
-#### Registering a transform
+### Registering a transform
+
+> **WARNING!**
+>
+> The **order** in which transforms are registered **matters!** Transforms are applied to the stream in the order they were registered. For example, if you first register a checksum calculation transform and then a compress transform, the checksum will be calculated from the uncompressed data. Switching the order would cause the checksum to be calculated from the compressed data. There are use cases for both situations, so the choice of ordering is completely up to you.
 
 When you configure your Nodestream instance, you should register transforms using the `.addTransform()` function.
 
@@ -163,9 +178,9 @@ nodestream.addTransform('download', 'compress', { mode: 'decompress' })
 
 Now, every time you call `.upload()` or `.download()`, the respective transform will be applied on the stream.
 
-For uploads, a transform can optionally publish some data about the applied transformations onto the `results` object.
+A transform can optionally publish some data about the applied transformations onto the `results` object.
 
-There is no limit to the amount of transforms which can be registered per Nodestream instance.
+There is no limit to the amount of transforms which can be registered per Nodestream instance, although there are some practical limitations which restrict you to only one particular transform type per Nodestream instance (ie. only one checksum transform with only one compress transform).
 
 ## License
 
