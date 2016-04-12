@@ -2,6 +2,7 @@
 instrumentation:
   # Include all source files so we know which files are not tested at all
   include-all-sources: true
+  root: lib
 
 reporting:
   reports:
