@@ -11,7 +11,7 @@
 module.exports = {
 
   extends: [
-    '@strv/javascript/environments/nodejs/latest',
+    '@strv/javascript/environments/nodejs/v5',
     '@strv/javascript/environments/nodejs/best-practices',
     '@strv/javascript/environments/nodejs/optional',
     '@strv/javascript/coding-styles/base'
@@ -20,6 +20,8 @@ module.exports = {
   rules: {
     // Node.js 4 does not support spread
     'prefer-spread': 0,
+    // Node.js 4 does not support Reflect
+    'prefer-reflect': 0,
     // If your editor cannot show these to you, occasionally turn this off and run the linter
     'no-warning-comments': 0
   }
