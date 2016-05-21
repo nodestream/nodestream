@@ -17,6 +17,7 @@ const Nodestream = require('../lib/nodestream')
 describe('Feature: Transformers', function() {
   let DummyTransform
   let storage
+  let pipeline
   let dummyFile
 
   beforeEach(function() {
@@ -46,19 +47,18 @@ describe('Feature: Transformers', function() {
     })
 
     storage = new Nodestream({ adapter: DummyAdapter })
+    pipeline = storage
+      .registerTransform(DummyTransform)
+      .pipeline()
+      .use('testidentity')
   })
 
 
   describe('Uploading', function() {
-    beforeEach(function() {
-      storage.addTransform('upload', DummyTransform)
-    })
-
-
     it('should pass the file to all transforms', function() {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
 
-      return storage.upload(dummyFile)
+      return pipeline.upload(dummyFile)
       .then(() => {
         spy.restore()
         expect(spy.callCount).to.equal(1)
@@ -80,33 +80,28 @@ describe('Feature: Transformers', function() {
       DummyTransform.prototype.transform = file => file
       DummyTransform.prototype.results = () => true
 
-      storage.addTransform('upload', DummyTransform, config)
+      storage.registerTransform(DummyTransform, config)
 
-      storage.upload(dummyFile)
+      pipeline.upload(dummyFile)
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      return expect(storage.upload(dummyFile))
+      return expect(pipeline.upload(dummyFile))
       .to.eventually.have.property('testidentity').and.to.equal(true)
     })
 
     it('should make the transform appear in the list of applied transforms', function() {
-      return expect(storage.upload(dummyFile))
+      return expect(pipeline.upload(dummyFile))
       .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
     })
   })
 
 
   describe('Downloading', function() {
-    beforeEach(function() {
-      storage.addTransform('download', DummyTransform)
-    })
-
-
     it('should pass the file to all transforms', function() {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
 
-      return storage.download('fake/location', new stream.PassThrough())
+      return pipeline.download('fake/location', new stream.PassThrough())
       .then(() => {
         spy.restore()
         expect(spy.callCount).to.equal(1)
@@ -128,17 +123,17 @@ describe('Feature: Transformers', function() {
       DummyTransform.prototype.transform = file => file
       DummyTransform.prototype.results = () => true
 
-      storage.addTransform('download', DummyTransform, config)
-      storage.download('fake/location', new stream.PassThrough())
+      storage.registerTransform(DummyTransform, config)
+      pipeline.download('fake/location', new stream.PassThrough())
     })
 
     it('should gather transformation results and publish it to the results object', function() {
-      return expect(storage.download('fake/location', new stream.PassThrough()))
+      return expect(pipeline.download('fake/location', new stream.PassThrough()))
       .to.eventually.have.property('testidentity').and.to.equal(true)
     })
 
     it('should make the transform appear in the list of applied transforms', function() {
-      return expect(storage.download('fake/location', new stream.PassThrough()))
+      return expect(pipeline.download('fake/location', new stream.PassThrough()))
       .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
     })
   })

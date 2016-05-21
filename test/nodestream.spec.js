@@ -271,7 +271,7 @@ describe('Class: Nodestream', function() {
   })
 
 
-  describe('.addTransform()', function() {
+  describe('.registerTransform()', function() {
     class DummyTransform {
       static get identity() {
         return 'testidentity'
@@ -280,42 +280,41 @@ describe('Class: Nodestream', function() {
 
 
     it('should be function', function() {
-      expect(storage).to.have.property('addTransform')
-      expect(storage.addTransform).to.be.a('function')
+      expect(storage).to.have.property('registerTransform')
+      expect(storage.registerTransform).to.be.a('function')
     })
 
     it('should return self', function() {
-      expect(storage.addTransform('upload', DummyTransform)).to.equal(storage)
+      expect(storage.registerTransform(DummyTransform)).to.equal(storage)
     })
 
     it('should accept class/constructor function', function() {
       function DummyCtor() {}
       DummyCtor.identity = 'testidentity'
 
-      expect(() => storage.addTransform('upload', DummyTransform)).to.not.throw()
-      expect(() => storage.addTransform('upload', DummyCtor)).to.not.throw()
+      expect(() => storage.registerTransform(DummyTransform)).to.not.throw()
+      expect(() => storage.registerTransform(DummyCtor)).to.not.throw()
     })
 
     it("should attempt to require the transform if only the transform's name is given", function() {
-      expect(() => storage.addTransform('upload', 'checksum'))
+      expect(() => storage.registerTransform('checksum'))
       .to.throw(/Cannot find transform package nodestream-transform-checksum/)
     })
 
-    it('should reject invalid direction', function() {
-      expect(() => storage.addTransform('upsidedown', DummyTransform)).to.throw(/Invalid direction/)
-    })
-
     it('should reject non-class/constructor function values', function() {
-      expect(() => storage.addTransform('upload', 1234)).to.throw()
-      expect(() => storage.addTransform('upload', 'ab')).to.throw()
-      expect(() => storage.addTransform('upload', null)).to.throw()
-      expect(() => storage.addTransform('upload', {})).to.throw()
+      expect(() => storage.registerTransform(1234)).to.throw()
+      expect(() => storage.registerTransform(Infinity)).to.throw()
+      expect(() => storage.registerTransform(NaN)).to.throw()
+      expect(() => storage.registerTransform(void 0)).to.throw()
+      expect(() => storage.registerTransform(true)).to.throw()
+      expect(() => storage.registerTransform(null)).to.throw()
+      expect(() => storage.registerTransform({})).to.throw()
     })
 
     it('should reject implementations without declared identity', function() {
       class Invalid {}
 
-      expect(() => storage.addTransform('upload', Invalid)).to.throw(ReferenceError)
+      expect(() => storage.registerTransform(Invalid)).to.throw(ReferenceError)
     })
   })
 })
