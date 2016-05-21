@@ -94,6 +94,21 @@ describe('Feature: Transformers', function() {
       return expect(pipeline.upload(dummyFile))
       .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
     })
+
+    it('passes per-file configuration options to the transformer', function() {
+      const spy = sinon.spy(DummyTransform.prototype, 'transform')
+      const transformOpts = { received: true }
+
+      return pipeline.upload(dummyFile, { testidentity: transformOpts })
+      .then(() => {
+        expect(spy.getCall(0).args[1]).to.equal(transformOpts)
+      })
+      .catch(err => {
+        spy.restore()
+
+        throw err
+      })
+    })
   })
 
 
@@ -135,6 +150,23 @@ describe('Feature: Transformers', function() {
     it('should make the transform appear in the list of applied transforms', function() {
       return expect(pipeline.download('fake/location', new stream.PassThrough()))
       .to.eventually.have.property('transforms').which.contains(DummyTransform.identity)
+    })
+
+    it('passes per-file configuration options to the transformer', function() {
+      const spy = sinon.spy(DummyTransform.prototype, 'transform')
+      const transformOpts = { received: true }
+
+      return pipeline.download('fake/location', new stream.PassThrough(), {
+        testidentity: transformOpts
+      })
+      .then(() => {
+        expect(spy.getCall(0).args[1]).to.equal(transformOpts)
+      })
+      .catch(err => {
+        spy.restore()
+
+        throw err
+      })
     })
   })
 })
