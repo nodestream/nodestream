@@ -53,6 +53,40 @@ describe('Feature: Transformers', function() {
       .use('testidentity')
   })
 
+  it('creates new Transform instance for each file (upload)', function() {
+    const spy = sinon.spy(DummyTransform)
+
+    spy.identity = 'spy'
+    pipeline = storage.registerTransform(spy)
+      .pipeline()
+      .use('spy')
+
+    return Promise.all([
+      pipeline.upload(dummyFile),
+      pipeline.upload(dummyFile)
+    ])
+    .then(() => {
+      expect(spy.callCount).to.equal(2)
+    })
+  })
+
+  it('creates new Transform instance for each file (download)', function() {
+    const spy = sinon.spy(DummyTransform)
+
+    spy.identity = 'spy'
+    pipeline = storage.registerTransform(spy)
+      .pipeline()
+      .use('spy')
+
+    return Promise.all([
+      pipeline.download('fake/location', new stream.PassThrough()),
+      pipeline.download('fake/location', new stream.PassThrough())
+    ])
+    .then(() => {
+      expect(spy.callCount).to.equal(2)
+    })
+  })
+
 
   describe('Uploading', function() {
     it('should pass the file to all transforms', function() {
