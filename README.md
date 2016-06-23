@@ -30,7 +30,14 @@
 
 ## Description
 
-This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.
+This library aims to provide a unified API for all the major storage systems out there (filesystem, AWS S3, Google Cloud Storage etc.). It also provides an easy way to manipulate data streams as they are being uploaded/downloaded from those storage systems (compression/ checksum calculation/encryption etc.).
+
+### Use cases
+
+- Single API to rule them all
+- Easy way to transform incoming/outgoing data
+- Work with filesystem storage during development, AWS S3 in production without changing code
+- *Insert your idea here*
 
 ## Available adapters
 
@@ -73,8 +80,7 @@ const nodestream = new Nodestream({
   // This object is always specific to your adapter of choice - always check
   // the documentation for that adapter for available options
   config: {
-    // You MUST provide either an absolute path or nothing at all
-    // You can use array notation, the parts will be joined for you
+    // The `filesystem` adapter requires a `root` configuration option, so let's provide one
     root: [__dirname, '.storage']
   }
 })
@@ -150,9 +156,16 @@ nodestream.remove('avatars/user-123.png')
 })
 ```
 
-## Transforms
+## Pipelines and Transforms
 
-Nodestream supports a feature called transforms. In principle, a transform is just a function that acts somehow on (ie. modifies) the incoming or outgoing bytes, transparently, for each stream passing through Nodestream. Some use cases:
+Nodestream supports two features which are meant to be used together - pipelines and transforms.
+
+**Transform**: A plugin which takes an input stream and produces an output stream
+**Pipeline**: A re-usable collection of transforms
+
+The real power of pipelines is that you only have to create a single pipeline, tell it which transforms it should use and then you just keep sending files to it - all files will be processed in exactly the same way.
+
+Here are some ideas what a transform can be used for. With pipelines, you can combine them to your heart's liking:
 
 - Calculating checksums
 - Compressing/decompressing data
@@ -160,25 +173,66 @@ Nodestream supports a feature called transforms. In principle, a transform is ju
 
 ### Registering a transform
 
-> **WARNING!**
->
-> The **order** in which transforms are registered **matters!** Transforms are applied to the stream in the order they were registered. For example, if you first register a checksum calculation transform and then a compress transform, the checksum will be calculated from the uncompressed data. Switching the order would cause the checksum to be calculated from the compressed data. There are use cases for both situations, so the choice of ordering is completely up to you.
+All transforms must be first registered with your Nodestream instance before you can use them in a pipeline. Registering is easy and is generally recommended to be done immediately after your application is started, because requiring a module is a synchronous, blocking operation, so you want to get it done before you start doing something important.
 
-When you configure your Nodestream instance, you should register transforms using the `.addTransform()` function.
+Once you configure your Nodestream instance, you can register a transform using the `.registerTransform()` function.
 
 ```js
-// The first argument defines when the transform should be applied ('upload', 'download')
-// The second argument is the transform's name - Nodestream will attempt to require
-// `nodestream-transform-compress` under the hood, so make sure you have it installed!
-// The third argument is an option configuration object which will be passed as-is to
-// the transform stream when the time comes to use the transform.
-nodestream.addTransform('upload', 'compress', { mode: 'compress' })
-nodestream.addTransform('download', 'compress', { mode: 'decompress' })
+// Let's register a compression transform! The following will try to require
+// `nodestream-transform-compress` package.
+nodestream.registerTransform('compress')
+
+// You can also register an actual implementation of the transform!
+const compress = require('nodestream-transform-compress')
+nodestream.registerTransform(compress)
 ```
 
-Now, every time you call `.upload()` or `.download()`, the respective transform will be applied on the stream.
+### Using pipelines
 
-A transform can optionally publish some data about the applied transformations onto the `results` object.
+To use a pipeline, you must first create one! Once you have your pipeline, you can then go on and tell it to use any of the registered transforms. Pipelines are reusable, so the general practice is to create one pipeline and use it for all uploads/downloads.
+
+You may want to create multiple pipelines per project to accommodate different processing needs for your files, ie. you might have one pipeline for image uploads (with a transform plugin to calculate checksums and one to crop the images) and another pipeline for other files (with just the checksum transform). Any combination can be achieved.
+
+```js
+// Let's create our first pipeline
+const pipeline = nodestream.pipeline()
+
+// Now, we can tell the pipeline to use any of the registered transforms
+// The second parameter is specific to each transform so always check the
+// transform's docs to see what you can set
+pipeline
+  .use('checksum', { algorithm: 'md5' })
+  .use('compress', { algorithm: 'gzip' })
+
+// You can use a single pipeline for multiple file uploads/downloads
+// Aaand, you can also pass per-file, transform-specific options here
+pipeline.upload(file, { name: 'pic.png', compress: { mode: 'compress' } })
+```
+
+> **WARNING!**
+>
+> The **order** in which transforms are added to a pipeline using `.use()` **matters!** Transforms are applied to the stream in the order they were added. For example, if you first add a checksum calculation transform and then a compress transform, the checksum will be calculated from the uncompressed data. Switching the order would cause the checksum to be calculated from the compressed data. There are use cases for both situations, so the choice of ordering is completely up to you.
+
+
+### Accessing transform results
+
+You might have noticed that Nodestream returns a Promise which is resolved with a `results` object. In addition to the `location` property, this object also contains results of all applied transformations (if there are any).
+
+Each transform declares its "identity" - a string which will be used as a "scope" to publish its results or to provide a mechanism to customise the transform's options. Check each of the transforms' documentation to learn what is its `identity` string.
+
+For the `checksum` transform, its identity is, surprisingly, "checksum". When used, the calculated checksum can be obtained as follows:
+
+```js
+nodestream
+  .pipeline()
+  .use('checksum')
+  .upload(file, { name: 'pic.png' })
+  .then(results => {
+    // The `results` object will have a "checksum" property, because that's
+    // the transform's identity
+    console.log(results.checksum.value)
+  })
+```
 
 There is no limit to the amount of transforms which can be registered per Nodestream instance, although there are some practical limitations which restrict you to only one particular transform type per Nodestream instance (ie. only one checksum transform with only one compress transform).
 
