@@ -160,10 +160,10 @@ nodestream.remove('avatars/user-123.png')
 
 Nodestream supports two features which are meant to be used together - pipelines and transforms.
 
-**Transform**: A plugin which takes an input stream and produces an output stream
-**Pipeline**: A re-usable collection of transforms
+- **Transform**: A plugin which takes an input stream and produces an output stream
+- **Pipeline**: A re-usable, ordered collection of transforms
 
-The real power of pipelines is that you only have to create a single pipeline, tell it which transforms it should use and then you just keep sending files to it - all files will be processed in exactly the same way.
+The real power of pipelines is that you only have to create a single pipeline, tell it which transforms it should use and then you just keep sending files to or retrieving files from it - all files will be processed in exactly the same way.
 
 Here are some ideas what a transform can be used for. With pipelines, you can combine them to your heart's liking:
 
