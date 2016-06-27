@@ -48,7 +48,7 @@ This library aims to provide a unified API for all the major storage systems out
 
 ## Available transforms
 
-> See [Transforms](#transforms) section for more info.
+> See [Pipelines and Transforms](#pipelines-and-transforms) section for more info.
 
 | [checksum][ns-checksum] | [compress][ns-compress] | progress (WIP)   | crypto (WIP)           |
 |:-----------------------:|:-----------------------:|:----------------:|:----------------------:|
