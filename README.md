@@ -236,6 +236,10 @@ nodestream
 
 There is no limit to the amount of transforms which can be registered per Nodestream instance, although there are some practical limitations which restrict you to only one particular transform type per Nodestream instance (ie. only one checksum transform with only one compress transform).
 
+## Contributing
+
+Looking for suggestions, improvements, bug reports... any kind of contribution is welcome!
+
 ## License
 
 This software is licensed under the **BSD-3-Clause License**. See the [LICENSE](LICENSE) file for more information.
