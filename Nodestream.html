@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#addTransform">addTransform</a></li><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#isInstalled">isInstalled</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#registerTransform">registerTransform</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -236,7 +236,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line19">line 19</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -285,14 +285,14 @@
 
     
 
-    <h4 class="name" id="addTransform"><span class="type-signature"></span>addTransform<span class="signature">(direction, transformer, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
+    <h4 class="name" id="download"><span class="type-signature"></span>download<span class="signature">(location, destination, options<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Register a transform</p>
+    <p>Download a file from the remote storage</p>
 </div>
 
 
@@ -330,7 +330,7 @@
 
         <tr>
             
-                <td class="name"><code>direction</code></td>
+                <td class="name"><code>location</code></td>
             
 
             <td class="type">
@@ -354,24 +354,21 @@
 
             
 
-            <td class="description last"><p>Direction for which the transform should be applied.
-                                         Allowed values are: <code>upload</code>, <code>download</code></p></td>
+            <td class="description last"><p>The location of the file on the remote storage to
+                                             download</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>transformer</code></td>
+                <td class="name"><code>destination</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Class</span>
-|
-
-<span class="param-type">String</span>
+<span class="param-type">stream.Writable</span>
 
 
             
@@ -389,11 +386,7 @@
 
             
 
-            <td class="description last"><p>A class/constructor function to be used for data
-                                         transformations. A new instance of this class will be
-                                         created for each file being uploaded/downloaded. If a
-                                         string is given, <code>nodestream-transform-{transformer}</code>
-                                         will be <code>require</code>d.</p></td>
+            <td class="description last"><p>The destination stream into which to send the data</p></td>
         </tr>
 
     
@@ -415,9 +408,9 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
+                
+                    &lt;nullable><br>
                 
 
                 
@@ -426,8 +419,7 @@
 
             
 
-            <td class="description last"><p>An object which will be passed directly to the
-                                         transformer constructor when an instance is created.</p></td>
+            <td class="description last"><p>Options for the download</p></td>
         </tr>
 
     
@@ -468,7 +460,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line160">line 160</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -502,7 +494,7 @@
     </dt>
     <dd>
         
-<span class="param-type">this</span>
+<span class="param-type">Promise</span>
 
 
     </dd>
@@ -517,14 +509,14 @@
 
     
 
-    <h4 class="name" id="download"><span class="type-signature"></span>download<span class="signature">(location)</span><span class="type-signature"> &rarr; {stream.Readable}</span></h4>
+    <h4 class="name" id="registerTransform"><span class="type-signature"></span>registerTransform<span class="signature">(transformer)</span><span class="type-signature"> &rarr; {this}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Download a file from the remote storage</p>
+    <p>Register a transform</p>
 </div>
 
 
@@ -560,12 +552,15 @@
 
         <tr>
             
-                <td class="name"><code>location</code></td>
+                <td class="name"><code>transformer</code></td>
             
 
             <td class="type">
             
                 
+<span class="param-type">Class</span>
+|
+
 <span class="param-type">String</span>
 
 
@@ -576,8 +571,11 @@
 
             
 
-            <td class="description last"><p>The location of the file on the remote storage to
-                                             download</p></td>
+            <td class="description last"><p>A class/constructor function to be used for data
+                                         transformations. A new instance of this class will be
+                                         created for each file being uploaded/downloaded. If a
+                                         string is given, <code>nodestream-transform-{transformer}</code>
+                                         will be <code>require</code>d.</p></td>
         </tr>
 
     
@@ -618,7 +616,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line120">line 120</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -652,7 +650,7 @@
     </dt>
     <dd>
         
-<span class="param-type">stream.Readable</span>
+<span class="param-type">this</span>
 
 
     </dd>
@@ -767,7 +765,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line139">line 139</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -816,7 +814,7 @@
 
     
 
-    <h4 class="name" id="upload"><span class="type-signature"></span>upload<span class="signature">(file, options)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="upload"><span class="type-signature"></span>upload<span class="signature">(file, options<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -847,6 +845,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -872,6 +872,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -896,10 +904,20 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Options for the adapter</p>
+            <td class="description last"><p>Options for the upload</p>
                 <h6>Properties</h6>
                 
 
@@ -1037,7 +1055,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line78">line 78</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1099,7 +1117,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Mar 20 2016 01:33:19 GMT+0100 (CET) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jul 16 2016 01:30:12 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#addTransform">addTransform</a></li><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#isInstalled">isInstalled</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#registerTransform">registerTransform</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -48,10 +48,9 @@
 
 'use strict'
 
-const uuid = require('uuid')
-const stream = require('stream')
-const scope = Symbol('scope')
-
+const Pipeline = require('./pipeline')
+const isInstalled = require('./util/is-installed')
+const scope = Symbol('nodestream internal')
 
 /**
  * The Nodestream class. Responsible for streaming your bytes up and down, relentlessly.
@@ -71,35 +70,48 @@ class Nodestream {
    * @return    {Nodestream}
    */
   constructor(options) {
-
     // Normalise...
     options = options || {}
-    options.config = options.config || {}
+    options = {
+      config: options.config || {},
+      adapter: options.adapter
+    }
 
     // Allow specifying adapters as strings and take care of requiring them
     if (typeof options.adapter === 'string') {
-      if (! isInstalled(`nodestream-${options.adapter}`))
-        throw new Error(`Cannot find ${options.adapter} adapter - did you \`npm install\` it?`)
+      const pkg = `nodestream-${options.adapter}`
+
+      if (!isInstalled(pkg)) {
+        throw new Error(`Cannot find adapter package ${pkg} - did you \`npm install\` it?`)
+      }
 
       // eslint-disable-next-line global-require
-      options.adapter = require(`nodestream-${options.adapter}`)
+      options.adapter = require(pkg)
     }
 
     // If the adapter has been provided explicitly, make sure it's a constructor function/class
-    if (typeof options.adapter !== 'function')
+    if (typeof options.adapter !== 'function') {
       throw new TypeError('You must provide a valid Nodestream adapter')
+    }
 
-    // Instantiate the adapter
-    // eslint-disable-next-line new-cap
-    options.adapter = new options.adapter(options.config)
+    if (typeof options.adapter.identity !== 'string') {
+      throw new ReferenceError(`Adapter ${options.adapter.name} does not declare its identity`)
+    }
 
     this[scope] = {
       options,
-      transforms: {
-        upload: [],
-        download: []
-      }
+      // Instantiate the adapter
+      // eslint-disable-next-line new-cap
+      adapter: new options.adapter(options.config),
+      transforms: new Map()
     }
+  }
+
+  pipeline() {
+    return new Pipeline({
+      adapter: this[scope].adapter,
+      transforms: this[scope].transforms
+    })
   }
 
   /**
@@ -107,7 +119,7 @@ class Nodestream {
    *
    * @param     {stream.Readable}   file                A readable stream representing the file to
    *                                                    be uploaded
-   * @param     {Object}            options             Options for the adapter
+   * @param     {Object?}           options             Options for the upload
    * @param     {String?}           options.directory   Directory to which the file should be
    *                                                    uploaded
    * @param     {String?}           options.name        Filename to upload the file to. If you do
@@ -116,38 +128,7 @@ class Nodestream {
    * @return    {Promise}
    */
   upload(file, options) {
-
-    if (! (file instanceof stream.Readable))
-      throw new TypeError('Only readable streams can be uploaded')
-
-    const adapter = this[scope].options.adapter
-    const result = {}
-    const transforms = []
-
-    // Normalise options
-    options = options || {}
-    // If no name has been given, generate one
-    options.name = options.name || uuid.v4()
-
-    // Apply upload transforms
-    file = this[scope].transforms.upload.reduce(
-      (upstream, transform) => {
-        const transformer = new transform.Transformer(transform.options)
-
-        transforms.push(transformer)
-
-        return transformer.transform(upstream)
-      }, file)
-
-    return adapter.upload(file, options)
-    .then(location => {
-      result.location = location
-
-      for (const transformer of transforms)
-        result[transformer.constructor.identity] = transformer.results()
-
-      return result
-    })
+    return this.pipeline().upload(file, options)
   }
 
   /**
@@ -155,19 +136,12 @@ class Nodestream {
    *
    * @param     {String}            location      The location of the file on the remote storage to
    *                                              download
-   * @return    {stream.Readable}
+   * @param     {stream.Writable}  destination    The destination stream into which to send the data
+   * @param     {Object?}          options        Options for the download
+   * @return    {Promise}
    */
-  download(location) {
-
-    const adapter = this[scope].options.adapter
-
-    // Apply download transforms and return the last returned stream
-    return this[scope].transforms.download.reduce(
-      (downstream, transform) => {
-        const transformer = new transform.Transformer(transform.options)
-
-        return transformer.transform(downstream)
-      }, adapter.download(location))
+  download(location, destination, options) {
+    return this.pipeline().download(location, destination, options)
   }
 
   /**
@@ -177,74 +151,47 @@ class Nodestream {
    * @return    {Promise}
    */
   remove(location) {
-
-    const adapter = this[scope].options.adapter
-
-    return adapter.remove(location)
+    return this.pipeline().remove(location)
   }
 
   /**
    * Register a transform
    *
-   * @param     {String}        direction     Direction for which the transform should be applied.
-   *                                          Allowed values are: `upload`, `download`
    * @param     {Class|String}  transformer   A class/constructor function to be used for data
    *                                          transformations. A new instance of this class will be
    *                                          created for each file being uploaded/downloaded. If a
    *                                          string is given, `nodestream-transform-{transformer}`
    *                                          will be `require`d.
-   * @param     {Object=}       options       An object which will be passed directly to the
-   *                                          transformer constructor when an instance is created.
    * @return    {this}
    */
-  addTransform(direction, transformer, options) {
-
+  registerTransform(transformer) {
     // Allow specifying transformers as strings and take care of requiring them
     if (typeof transformer === 'string') {
-      if (! isInstalled(`nodestream-transform-${transformer}`))
-        throw new Error(`Cannot find ${transformer} transform - did you \`npm install\` it?`)
+      const pkg = `nodestream-transform-${transformer}`
+
+      if (!isInstalled(pkg)) {
+        throw new Error(`Cannot find transform package ${pkg} - did you \`npm install\` it?`)
+      }
 
       // eslint-disable-next-line global-require
-      transformer = require(`nodestream-transform-${transformer}`)
+      transformer = require(pkg)
     }
 
-    if (typeof transformer !== 'function')
+    if (typeof transformer !== 'function') {
       throw new TypeError('Transformer must be a class or constructor function')
+    }
 
-    if (typeof transformer.identity !== 'string')
+    if (typeof transformer.identity !== 'string') {
       throw new ReferenceError(`Transformer ${transformer.name} does not declare its identity`)
+    }
 
-    if (['upload', 'download'].indexOf(direction) === -1)
-      throw new Error(`Invalid direction: ${direction} - only 'upload' and 'download' are allowed`)
-
-    options = options || {}
-
-    this[scope].transforms[direction].push({ Transformer: transformer, options })
+    this[scope].transforms.set(transformer.identity, transformer)
 
     return this
   }
 }
 
 module.exports = Nodestream
-
-
-/**
- * Check if a module is installed
- *
- * @param     {String}    moduleName    The module name to check
- * @return    {Boolean}
- */
-function isInstalled(moduleName) {
-
-  try {
-    // eslint-disable-next-line global-require
-    require.resolve(moduleName)
-
-    return true
-  } catch (err) {
-    return false
-  }
-}
 </code></pre>
         </article>
     </section>
@@ -257,7 +204,7 @@ function isInstalled(moduleName) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Mar 20 2016 01:33:19 GMT+0100 (CET) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jul 16 2016 01:30:12 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

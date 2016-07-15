@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#addTransform">addTransform</a></li><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#isInstalled">isInstalled</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Nodestream.html">Nodestream</a><ul class='methods'><li data-type='method'><a href="Nodestream.html#download">download</a></li><li data-type='method'><a href="Nodestream.html#registerTransform">registerTransform</a></li><li data-type='method'><a href="Nodestream.html#remove">remove</a></li><li data-type='method'><a href="Nodestream.html#upload">upload</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -55,12 +55,19 @@
 <blockquote>
 <p>Streaming library for binary data transfers</p>
 </blockquote>
-<h2>Description</h2><p>This library aims to provide an abstraction layer between your application/library and all the various remote storage services which exist on the market, either as hosted by 3rd parties or self-hosted (S3, GridFS etc.). Your code should not depend on these services directly - the code responsible for uploading a file should remain the same no matter which storage service you decide to use. The only thing that can change is the configuration.</p>
-<h2>Adapters</h2><table>
+<h2>Description</h2><p>This library aims to provide a unified API for all the major storage systems out there (filesystem, AWS S3, Google Cloud Storage etc.). It also provides an easy way to manipulate data streams as they are being uploaded/downloaded from those storage systems (compression/ checksum calculation/encryption etc.).</p>
+<h3>Use cases</h3><ul>
+<li>Single API to rule them all</li>
+<li>Easy way to transform incoming/outgoing data</li>
+<li>Work with filesystem storage during development, AWS S3 in production without changing code</li>
+<li><em>Insert your idea here</em></li>
+</ul>
+<h2>Available adapters</h2><table>
 <thead>
 <tr>
 <th style="text-align:center"><a href="https://github.com/nodestream/nodestream-s3"><img src="https://cloud.githubusercontent.com/assets/3058150/13901098/80692616-ee18-11e5-98c1-91c35b936c51.png" alt="S3"></a></th>
 <th style="text-align:center"><a href="https://github.com/nodestream/nodestream-gridfs"><img src="https://cloud.githubusercontent.com/assets/3058150/13901696/59652146-ee2c-11e5-8c7e-3cba5ba9854c.png" alt="GridFS"></a></th>
+<th style="text-align:center"><a href="https://github.com/nodestream/nodestream-gcs"><img src="https://cloud.githubusercontent.com/assets/3058150/13907413/bfb554e0-eeed-11e5-9e51-ce490fad8abd.png" alt="GCS"></a></th>
 <th style="text-align:center"><a href="https://github.com/nodestream/nodestream-filesystem"><img src="https://cloud.githubusercontent.com/assets/3058150/13901081/d81b824c-ee17-11e5-8fbe-40eff40646f7.png" alt="Filesystem"></a></th>
 </tr>
 </thead>
@@ -68,7 +75,29 @@
 <tr>
 <td style="text-align:center">Amazon S3</td>
 <td style="text-align:center">GridFS (WIP)</td>
+<td style="text-align:center">Google Cloud Storage</td>
 <td style="text-align:center">Local Filesystem</td>
+</tr>
+</tbody>
+</table>
+<h2>Available transforms</h2><blockquote>
+<p>See <a href="#pipelines-and-transforms">Pipelines and Transforms</a> section for more info.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><a href="https://github.com/nodestream/nodestream-transform-checksum">checksum</a></th>
+<th style="text-align:center"><a href="https://github.com/nodestream/nodestream-transform-compress">compress</a></th>
+<th style="text-align:center">progress (WIP)</th>
+<th style="text-align:center">crypto (WIP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Checksum Calculator</td>
+<td style="text-align:center">Stream (de)compressor</td>
+<td style="text-align:center">Progress monitor</td>
+<td style="text-align:center">Stream (en/de)cryption</td>
 </tr>
 </tbody>
 </table>
@@ -86,12 +115,11 @@ const nodestream = new Nodestream({
   // This object is always specific to your adapter of choice - always check
   // the documentation for that adapter for available options
   config: {
-    // You MUST provide either an absolute path or nothing at all
-    // You can use array notation, the parts will be joined for you
+    // The `filesystem` adapter requires a `root` configuration option, so let's provide one
     root: [__dirname, '.storage']
   }
 })</code></pre><p>Great! At this point, nodestream is ready to transfer some bytes!</p>
-<h3>Usage</h3><h4>Uploading</h4><p>You can upload any kind of readable stream. Nodestream does not care where that stream comes from, whether it's an http upload or a file from your filesystem or something totally different.</p>
+<h3>Actions</h3><h4>Uploading</h4><p>You can upload any kind of readable stream. Nodestream does not care where that stream comes from, whether it's an http upload or a file from your filesystem or something totally different.</p>
 <p>For this example, we will upload a file from our filesystem.</p>
 <blockquote>
 <p>We will be uploading the file to our local filesystem as well as reading it from the same filesystem. Normally you would probably use a source different from the target storage, but Nodestream does not really care.</p>
@@ -115,41 +143,77 @@ nodestream.upload(profilePic, {
 .catch(err => {
   // U-oh, something blew up 😱
 })</code></pre><p>Congratulations, you just uploaded your first file!</p>
-<h4>Downloading</h4><p>Downloading a file is quite straight-forward - all you need is the file's location as returned by the <code>upload()</code> method. You will always get back a readable stream which you can then <code>.pipe()</code> to something. Again, Nodestream does not care where you are sending the bytes, be it local filesystem, an http response or even a different Nodestream instance (ie. S3 to GridFS transfer).</p>
-<pre class="prettyprint source lang-js"><code>// We are hardcoding the location here, but you will probably want to
-// retrieve the file's location from a database
-const file = nodestream.download('avatars/user-123.png')
-
-// Let's create a destination for the download
+<h4>Downloading</h4><p>Downloading a file is quite straight-forward - all you need is the file's location as returned by the <code>upload()</code> method and a destination stream to which you want to send the data. This can be any valid writable stream. Again, Nodestream does not care where you are sending the bytes, be it local filesystem, an http response or even a different Nodestream instance (ie. S3 to GridFS transfer).</p>
+<pre class="prettyprint source lang-js"><code>// Let's create a destination for the download
 const fs = require('fs')
 const destination = fs.createWriteStream('/users/me/downloads/picture.png')
 
-// Since file is a readable stream, we can pipe it to any other writable
-// stream we like
-file.pipe(destination)
-file.once('end', () => console.log('all bytes sent to destination!'))</code></pre><h4>Removing</h4><p>Just pass the file's location to the <code>.remove()</code> method.</p>
+// We are hardcoding the location here, but you will probably want to
+// retrieve the file's location from a database
+nodestream.download('avatars/user-123.png', destination)
+.then(() => {
+  // All good, destination received all the data!
+})
+.catch(err => {
+  // Oh well...
+})</code></pre><h4>Removing</h4><p>Just pass the file's location to the <code>.remove()</code> method.</p>
 <pre class="prettyprint source lang-js"><code>nodestream.remove('avatars/user-123.png')
 .then(location => {
   // The file at this location has just been removed!
 })
 .catch(err => {
   // Oh no!
-})</code></pre><h3>Transforms</h3><p>Nodestream supports a feature called transforms. In principle, a transform is just a function that modifies the incoming or outgoing bytes in some way, transparently for each stream passing through Nodestream. Some use cases:</p>
+})</code></pre><h2>Pipelines and Transforms</h2><p>Nodestream supports two features which are meant to be used together - pipelines and transforms.</p>
+<ul>
+<li><strong>Transform</strong>: A plugin which takes an input stream and produces an output stream</li>
+<li><strong>Pipeline</strong>: A re-usable, ordered collection of transforms</li>
+</ul>
+<p>The real power of pipelines is that you only have to create a single pipeline, tell it which transforms it should use and then you just keep sending files to or retrieving files from it - all files will be processed in exactly the same way.</p>
+<p>Here are some ideas what a transform can be used for. With pipelines, you can combine them to your heart's liking:</p>
 <ul>
 <li>Calculating checksums</li>
 <li>Compressing/decompressing data</li>
 <li>Modifying the data completely, ie. appending headers/footers and whatnot</li>
 </ul>
-<h4>Registering a transform</h4><p>When you configure your Nodestream instance, you should register transforms using the <code>.addTransform()</code> function.</p>
-<pre class="prettyprint source lang-js"><code>// The first argument defines when the transform should be applied ('upload', 'download')
-// The second argument is the transform's name - Nodestream will attempt to require
-// `nodestream-transform-compress` under the hood, so make sure you have it installed!
-// The third argument is an option configuration object which will be passed as-is to
-// the transform stream when the time comes to use the transform.
-nodestream.addTransform('upload', 'compress', { mode: 'compress' })
-nodestream.addTransform('download', 'compress', { mode: 'decompress' })</code></pre><p>Now, every time you call <code>.upload()</code> or <code>.download()</code>, the respective transform will be applied on the stream.</p>
-<p>For uploads, a transform can optionally publish some data about the applied transformations onto the <code>results</code> object.</p>
-<p>There is no limit to the amount of transforms which can be registered per Nodestream instance.</p>
+<h3>Registering a transform</h3><p>All transforms must be first registered with your Nodestream instance before you can use them in a pipeline. Registering is easy and is generally recommended to be done immediately after your application is started, because requiring a module is a synchronous, blocking operation, so you want to get it done before you start doing something important.</p>
+<p>Once you configure your Nodestream instance, you can register a transform using the <code>.registerTransform()</code> function.</p>
+<pre class="prettyprint source lang-js"><code>// Let's register a compression transform! The following will try to require
+// `nodestream-transform-compress` package.
+nodestream.registerTransform('compress')
+
+// You can also register an actual implementation of the transform!
+const compress = require('nodestream-transform-compress')
+nodestream.registerTransform(compress)</code></pre><h3>Using pipelines</h3><p>To use a pipeline, you must first create one! Once you have your pipeline, you can then go on and tell it to use any of the registered transforms. Pipelines are reusable, so the general practice is to create one pipeline and use it for all uploads/downloads.</p>
+<p>You may want to create multiple pipelines per project to accommodate different processing needs for your files, ie. you might have one pipeline for image uploads (with a transform plugin to calculate checksums and one to crop the images) and another pipeline for other files (with just the checksum transform). Any combination can be achieved.</p>
+<pre class="prettyprint source lang-js"><code>// Let's create our first pipeline
+const pipeline = nodestream.pipeline()
+
+// Now, we can tell the pipeline to use any of the registered transforms
+// The second parameter is specific to each transform so always check the
+// transform's docs to see what you can set
+pipeline
+  .use('checksum', { algorithm: 'md5' })
+  .use('compress', { algorithm: 'gzip' })
+
+// You can use a single pipeline for multiple file uploads/downloads
+// Aaand, you can also pass per-file, transform-specific options here
+pipeline.upload(file, { name: 'pic.png', compress: { mode: 'compress' } })</code></pre><blockquote>
+<p><strong>WARNING!</strong></p>
+<p>The <strong>order</strong> in which transforms are added to a pipeline using <code>.use()</code> <strong>matters!</strong> Transforms are applied to the stream in the order they were added. For example, if you first add a checksum calculation transform and then a compress transform, the checksum will be calculated from the uncompressed data. Switching the order would cause the checksum to be calculated from the compressed data. There are use cases for both situations, so the choice of ordering is completely up to you.</p>
+</blockquote>
+<h3>Accessing transform results</h3><p>You might have noticed that Nodestream returns a Promise which is resolved with a <code>results</code> object. In addition to the <code>location</code> property, this object also contains results of all applied transformations (if there are any).</p>
+<p>Each transform declares its &quot;identity&quot; - a string which will be used as a &quot;scope&quot; to publish its results or to provide a mechanism to customise the transform's options. Check each of the transforms' documentation to learn what is its <code>identity</code> string.</p>
+<p>For the <code>checksum</code> transform, its identity is, surprisingly, &quot;checksum&quot;. When used, the calculated checksum can be obtained as follows:</p>
+<pre class="prettyprint source lang-js"><code>nodestream
+  .pipeline()
+  .use('checksum')
+  .upload(file, { name: 'pic.png' })
+  .then(results => {
+    // The `results` object will have a &quot;checksum&quot; property, because that's
+    // the transform's identity
+    console.log(results.checksum.value)
+  })</code></pre><p>There is no limit to the amount of transforms which can be registered per Nodestream instance, although there are some practical limitations which restrict you to only one particular transform type per Nodestream instance (ie. only one checksum transform with only one compress transform).</p>
+<h2>Contributing</h2><p>Looking for suggestions, improvements, bug reports... any kind of contribution is welcome!</p>
 <h2>License</h2><p>This software is licensed under the <strong>BSD-3-Clause License</strong>. See the <a href="LICENSE">LICENSE</a> file for more information.</p></article>
     </section>
 
@@ -163,7 +227,7 @@ nodestream.addTransform('download', 'compress', { mode: 'decompress' })</code></
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Mar 20 2016 01:33:19 GMT+0100 (CET) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jul 16 2016 01:30:12 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
