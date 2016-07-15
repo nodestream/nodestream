@@ -4,6 +4,7 @@ node_modules
 # Generated files
 docs
 coverage
+gh-pages
 
 # This allows local overrides of Make configuration without worrying about accidentally commiting
 # them with other changes
