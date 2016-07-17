@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pipeline - Documentation</title>
+    <title>Nodestream - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Pipeline</h1>
+    <h1 class="page-title">Nodestream</h1>
     
 
     
@@ -41,10 +41,10 @@
 <header>
     
         <h2>
-        Pipeline
+        Nodestream
         </h2>
         
-            <div class="class-description"><p>Pipeline - a set of ordered transforms</p></div>
+            <div class="class-description"><p>The Nodestream class. Responsible for streaming your bytes up and down, relentlessly.</p></div>
         
     
 </header>
@@ -58,16 +58,15 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Pipeline"><span class="type-signature"></span>new Pipeline<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Nodestream"><span class="type-signature"></span>new Nodestream<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create a new pipeline</p>
-<p>You should not create a pipeline yourself - let the Nodestream class do it for you via the
-<a href="Nodestream.html#pipeline"><code><code>.pipeline()</code></code></a> method.</p>
+    <p>Create a new instance</p>
+<p>Generally, you only need to create new instance for a specific storage destination.</p>
 </div>
 
 
@@ -119,7 +118,7 @@
 
             
 
-            <td class="description last"><p>Options for the pipeline</p>
+            <td class="description last"><p>Options to use for this destination</p>
                 <h6>Properties</h6>
                 
 
@@ -151,6 +150,34 @@
             <td class="type">
             
                 
+<span class="param-type">Class</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Storage adapter to use for this destination.
+                                               If string is given, <code>nodestream-{adapter}</code> will
+                                               be <code>require</code>d.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">Object</span>
 
 
@@ -161,30 +188,7 @@
 
             
 
-            <td class="description last"><p>The adapter to use</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>transforms</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Map</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The registered transforms which can be <code>.use()</code>d</p></td>
+            <td class="description last"><p>Storage adapter-specific configuration</p></td>
         </tr>
 
     
@@ -232,7 +236,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pipeline.js.html">pipeline.js</a>, <a href="pipeline.js.html#line20">line 20</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -289,6 +293,8 @@
 
 <div class="description">
     <p>Download a file from the remote storage</p>
+<p>This is a convenience method to be used in situations where you do not need a pipeline and just
+want a file to be downloaded from the remote storage.</p>
 </div>
 
 
@@ -456,7 +462,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pipeline.js.html">pipeline.js</a>, <a href="pipeline.js.html#line143">line 143</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line114">line 114</a>
     </li></ul></dd>
     
 
@@ -505,6 +511,264 @@
 
     
 
+    <h4 class="name" id="pipeline"><span class="type-signature"></span>pipeline<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Pipeline.html">Pipeline</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Create a new pipeline from this Nodestream instance</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Pipeline.html">Pipeline</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="registerTransform"><span class="type-signature"></span>registerTransform<span class="signature">(transformer)</span><span class="type-signature"> &rarr; {this}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Register a transform</p>
+<p>You must use this method to register a transform before you can <a href="Pipeline.html#use"><code><code>.use()</code></code></a>
+it in a pipeline.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transformer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Class</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A class/constructor function to be used for data
+                                         transformations. A new instance of this class will be
+                                         created for each file being uploaded/downloaded. If a
+                                         string is given, <code>nodestream-transform-{transformer}</code>
+                                         will be <code>require</code>d.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line144">line 144</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(location)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
@@ -513,6 +777,8 @@
 
 <div class="description">
     <p>Remove a file from the remote storage</p>
+<p>This is a convenience method to be used in situations where you do not need a pipeline and just
+want a file to be removed from the remote storage.</p>
 </div>
 
 
@@ -605,7 +871,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pipeline.js.html">pipeline.js</a>, <a href="pipeline.js.html#line205">line 205</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -662,6 +928,8 @@
 
 <div class="description">
     <p>Upload a file to the remote storage</p>
+<p>This is a convenience method to be used in situations where you do not need a pipeline and just
+want a file to be uploaded to the remote storage.</p>
 </div>
 
 
@@ -895,7 +1163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pipeline.js.html">pipeline.js</a>, <a href="pipeline.js.html#line79">line 79</a>
+        <a href="nodestream.js.html">nodestream.js</a>, <a href="nodestream.js.html#line98">line 98</a>
     </li></ul></dd>
     
 
@@ -940,199 +1208,6 @@
 
 
         
-            
-
-    
-
-    <h4 class="name" id="use"><span class="type-signature"></span>use<span class="signature">(transform, options<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Use the given transform plugin in this pipeline</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>transform</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The transform's <code>identity</code></p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Options to be passed to the transform when a file is about
-                                     to be processed</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pipeline.js.html">pipeline.js</a>, <a href="pipeline.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">this</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
     
 
     
@@ -1150,7 +1225,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jul 17 2016 19:36:15 GMT+0000 (UTC) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jul 17 2016 22:01:06 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
