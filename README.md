@@ -19,7 +19,7 @@
 [ns-checksum]: https://github.com/nodestream/nodestream-transform-checksum
 [ns-compress]: https://github.com/nodestream/nodestream-transform-compress
 
-# Nodestream
+# Nodestream <img src="https://raw.githubusercontent.com/nodestream/nodestream/master/media/artwork/nodestream.png" width="150px" alt="Nodestream logo" title="Nodestream" />
 
 [![NPM Version][npm-badge]][npm-url]
 [![Build Status][travis-badge]][travis-url]
