@@ -7,6 +7,7 @@
 [inch-badge]: http://inch-ci.org/github/nodestream/nodestream.svg
 [inch-url]: http://inch-ci.org/github/nodestream/nodestream
 [make-badge]: https://img.shields.io/badge/built%20with-GNU%20Make-brightgreen.svg
+[apidocs-url]: https://nodestream.github.io/nodestream
 [ns-fs]: https://github.com/nodestream/nodestream-filesystem
 [fs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901081/d81b824c-ee17-11e5-8fbe-40eff40646f7.png
 [ns-s3]: https://github.com/nodestream/nodestream-s3
@@ -27,6 +28,8 @@
 ![Built with GNU Make][make-badge]
 
 > Streaming library for binary data transfers
+
+[**API docs**][apidocs-url]
 
 ## Description
 
