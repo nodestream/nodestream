@@ -18,6 +18,7 @@
 [gcs-icon]: https://cloud.githubusercontent.com/assets/3058150/13907413/bfb554e0-eeed-11e5-9e51-ce490fad8abd.png
 [ns-checksum]: https://github.com/nodestream/nodestream-transform-checksum
 [ns-compress]: https://github.com/nodestream/nodestream-transform-compress
+[ns-progress]: https://github.com/nodestream/nodestream-transform-progress
 
 # Nodestream <img src="https://raw.githubusercontent.com/nodestream/nodestream/master/media/artwork/nodestream.png" width="150px" alt="Nodestream logo" title="Nodestream" />
 
@@ -53,9 +54,9 @@ This library aims to provide a unified API for all the major storage systems out
 
 > See [Pipelines and Transforms](#pipelines-and-transforms) section for more info.
 
-| [checksum][ns-checksum] | [compress][ns-compress] | progress (WIP)   | crypto (WIP)           |
-|:-----------------------:|:-----------------------:|:----------------:|:----------------------:|
-| Checksum Calculator     | Stream (de)compressor   | Progress monitor | Stream (en/de)cryption |
+| [checksum][ns-checksum] | [compress][ns-compress] | [progress][ns-progress] | crypto (WIP)           |
+|:-----------------------:|:-----------------------:|:----------------------:|:----------------------:|
+| Checksum Calculator     | Stream (de)compressor   | Progress monitor       | Stream (en/de)cryption |
 
 ## Usage
 
