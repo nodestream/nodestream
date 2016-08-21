@@ -47,7 +47,7 @@ This library aims to provide a unified API for all the major storage systems out
 
 | [![S3][s3-icon]][ns-s3] | [![GridFS][gridfs-icon]][ns-gridfs] | [![GCS][gcs-icon]][ns-gcs] | [![Filesystem][fs-icon]][ns-fs] |
 |:-----------------------:|:-----------------------------------:|:--------------------------:|:-------------------------------:|
-| Amazon S3               | GridFS (WIP)                        | Google Cloud Storage       | Local Filesystem                |
+| Amazon S3               | GridFS                              | Google Cloud Storage       | Local Filesystem                |
 
 
 ## Available transforms
