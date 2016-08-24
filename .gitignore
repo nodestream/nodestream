@@ -21,3 +21,4 @@ nbproject
 .node_history
 *.sublime-*
 *.atom-*
+.tern-project
