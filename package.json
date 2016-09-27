@@ -16,7 +16,7 @@
   "devDependencies": {
     "@strv/eslint-config-javascript": "^5.0.0",
     "chai": "^3.4.1",
-    "chai-as-promised": "^5.3.0",
+    "chai-as-promised": "^6.0.0",
     "coveralls": "^2.11.6",
     "eslint": "^3.0.0",
     "istanbul": "^0.4.2",
