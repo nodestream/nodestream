@@ -11,7 +11,7 @@
   },
   "contributors": [],
   "dependencies": {
-    "uuid": "^2.0.1"
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "@strv/eslint-config-javascript": "^5.0.0",
