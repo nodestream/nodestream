@@ -63,7 +63,7 @@ describe('Feature: Transformers', function() {
 
     return Promise.all([
       pipeline.upload(dummyFile),
-      pipeline.upload(dummyFile)
+      pipeline.upload(dummyFile),
     ])
     .then(() => {
       expect(spy.callCount).to.equal(2)
@@ -80,7 +80,7 @@ describe('Feature: Transformers', function() {
 
     return Promise.all([
       pipeline.download('fake/location', new stream.PassThrough()),
-      pipeline.download('fake/location', new stream.PassThrough())
+      pipeline.download('fake/location', new stream.PassThrough()),
     ])
     .then(() => {
       expect(spy.callCount).to.equal(2)
@@ -191,7 +191,7 @@ describe('Feature: Transformers', function() {
       const transformOpts = { received: true }
 
       return pipeline.download('fake/location', new stream.PassThrough(), {
-        testidentity: transformOpts
+        testidentity: transformOpts,
       })
       .then(() => {
         expect(spy.getCall(0).args[1]).to.equal(transformOpts)
