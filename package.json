@@ -17,7 +17,7 @@
     "@strv/eslint-config-javascript": "^6.3.0",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
-    "coveralls": "^2.11.6",
+    "coveralls": "^2.11.16",
     "eslint": "^3.13.0",
     "istanbul": "^0.4.2",
     "jsdoc": "^3.4.0",
