@@ -7,6 +7,8 @@ node_js:
 cache:
   directories:
   - node_modules
+before_install:
+- npm i -g npm@$(node -p "require('./package').engines.npm")
 script:
 - make lint
 - make test
