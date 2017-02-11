@@ -14,11 +14,11 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@strv/eslint-config-javascript": "^6.3.0",
+    "@strv/eslint-config-javascript": "^6.4.0",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
     "coveralls": "^2.11.6",
-    "eslint": "^3.13.0",
+    "eslint": "^3.15.0",
     "istanbul": "^0.4.2",
     "jsdoc": "^3.4.0",
     "minami": "^1.1.1",
