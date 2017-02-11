@@ -26,7 +26,7 @@ deploy:
   on:
     tags: true
     repo: nodestream/nodestream
-    node: '6'
+    node: '7'
 env:
   global:
     secure: t5gKDADYofYJYvaGmGgTpssh9Zvb0P0exSceKx9CaYEYtlFbdKUNhGZ9kHoBdrriJSM9yN9w5BUO6OQ0IVMFYkMYyw0zFj/OKuBoijGv2QhWDpoejjCaeZCJHJERDWl4UUzr9SnP49AVtfGuRv9LdwxcmquhBpnfYZnSf9NOwRQ5PuprVm34lxFF+qQAo9JW1IgtNn7cEqdbm8C7oC/OLDGJgDr0VBHiz5Qhaz7Rz63BcJA8rCTvqLmPgWssNF6dznsShnazAywxw2b4d2+FZ+wJL+wyRphceZOpV6DFovWVGnw56nyEuDnJI/5QfT0nHB0yL3Ljgz6iwgsQDu2TeRKmclgvLt56/xEzn6Y1ZgfLbXVrmcxZjGCTUd58inkXEBRIJM3Khk/E2sSUx6RHrFuCVTqOjHseqt/dazKBE6RJ4FhXh/AJSjspoSzXA/wlXRh5nrqSNvLbvPM0fzVjoz8JJ/PwXaRGivdbtOQnpOT7JsAl5zLrbIAYuPm0X7kPGgW88ctzqNI5QXURPb1mSpk9K1tTUVLJNCYyWhKz5POq57Rza12Pt7SFnIcWDpYArVqb8lA45Akb4uv9M1udBtHjyu8hEMJZVHZVe3Np7QKOXo9vFcIQ8cAryu7SUd+6H1ZtmzeNvo3j77SwOY3YbHxQVRgPdn/Wt07xQNFc4ho=
