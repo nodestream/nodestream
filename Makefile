@@ -7,7 +7,7 @@ include targets/shared/*.mk
 # Project-specific information
 ghuser = Alaneor
 lintfiles = lib test
-platform_t = v6.4
+platform_t = v7.5
 
 # Define version constraints
 gh-pages: platform-version
