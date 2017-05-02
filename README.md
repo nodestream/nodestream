@@ -22,6 +22,8 @@
 
 # Nodestream <img src="https://raw.githubusercontent.com/nodestream/nodestream/master/media/artwork/nodestream.png" width="150px" alt="Nodestream logo" title="Nodestream" />
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/nodestream/nodestream.svg)](https://greenkeeper.io/)
+
 [![NPM Version][npm-badge]][npm-url]
 [![Build Status][travis-badge]][travis-url]
 [![Coverage Status][coveralls-badge]][coveralls-url]
