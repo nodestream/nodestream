@@ -1,7 +1,9 @@
 # Dependencies
 node_modules
 **/node_modules
-**/coverage
+
+# Generated files
+coverage
 **/docs
 
 # This allows local overrides of Make configuration without worrying about accidentally commiting
@@ -9,6 +11,7 @@ node_modules
 local.mk
 
 # Garbage
+.nyc_output
 *.log
 *~
 *#
