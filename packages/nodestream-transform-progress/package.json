@@ -1,0 +1,40 @@
+{
+  "name": "nodestream-transform-progress",
+  "description": "Progress monitor for Nodestream",
+  "version": "0.1.1",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream-transform-progress/issues"
+  },
+  "contributors": [],
+  "dependencies": {},
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream-transform-progress",
+  "keywords": [
+    "progress",
+    "monitor",
+    "bytes",
+    "bytecount",
+    "upload",
+    "download",
+    "notifier",
+    "nodestream",
+    "nodestream-transform",
+    "transform"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/progress",
+  "peerDependencies": {
+    "nodestream": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream-transform-progress.git"
+  }
+}

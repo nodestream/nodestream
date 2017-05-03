@@ -1,0 +1,38 @@
+{
+  "name": "nodestream-transform-compress",
+  "description": "Zlib compression/decompression transform for Nodestream",
+  "version": "0.3.1",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream-transform-compress/issues"
+  },
+  "contributors": [],
+  "dependencies": {},
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream-transform-compress",
+  "keywords": [
+    "compress",
+    "zlib",
+    "gzip",
+    "inflate",
+    "deflate",
+    "nodestream",
+    "nodestream-transform",
+    "transform"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/compress",
+  "peerDependencies": {
+    "nodestream": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream-transform-compress.git"
+  }
+}

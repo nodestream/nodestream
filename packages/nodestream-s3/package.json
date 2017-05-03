@@ -1,0 +1,38 @@
+{
+  "name": "nodestream-s3",
+  "description": "AWS S3 adapter for Nodestream",
+  "version": "0.6.1",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream-s3/issues"
+  },
+  "contributors": [],
+  "dependencies": {
+    "aws-sdk": "^2.2.33",
+    "semantic-merge": "^2.0.0"
+  },
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream-s3",
+  "keywords": [
+    "adapter",
+    "amazon",
+    "aws",
+    "nodestream",
+    "s3"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/nodestream-s3",
+  "peerDependencies": {
+    "nodestream": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream-s3.git"
+  }
+}

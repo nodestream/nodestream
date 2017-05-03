@@ -1,0 +1,26 @@
+{
+  "source": {
+    "include": [
+      "./lib/",
+      "./README.md"
+    ]
+  },
+  "opts": {
+    "recurse": true,
+    "pedantic": true,
+    "template": "node_modules/minami"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "default": {
+      "outputSourceFiles": true
+    },
+    "linenums": true
+  },
+  "markdown": {
+    "parser": "gfm"
+  }
+}

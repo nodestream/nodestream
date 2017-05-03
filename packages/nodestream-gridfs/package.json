@@ -1,0 +1,36 @@
+{
+  "name": "nodestream-gridfs",
+  "description": "MongoDB GridFS adapter for Nodestream",
+  "version": "0.2.0",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream-gridfs/issues"
+  },
+  "contributors": [],
+  "dependencies": {
+    "mongodb": "^2.2.7"
+  },
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream-gridfs",
+  "keywords": [
+    "adapter",
+    "gridfs",
+    "mongo",
+    "nodestream"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/nodestream-gridfs",
+  "peerDependencies": {
+    "nodestream": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream-gridfs.git"
+  }
+}

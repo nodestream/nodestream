@@ -1,0 +1,38 @@
+{
+  "name": "nodestream-gcs",
+  "description": "Google Cloud Storage adapter for Nodestream",
+  "version": "0.7.0",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream-gcs/issues"
+  },
+  "contributors": [],
+  "dependencies": {
+    "@google-cloud/storage": "^0.7.0"
+  },
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream-gcs",
+  "keywords": [
+    "nodestream",
+    "adapter",
+    "google",
+    "cloud",
+    "storage",
+    "gcs"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/nodestream-gcs",
+  "peerDependencies": {
+    "nodestream": "^0.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream-gcs.git"
+  }
+}

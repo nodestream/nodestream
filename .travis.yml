@@ -1,0 +1,32 @@
+sudo: false
+language: node_js
+node_js:
+- '4'
+- '5'
+- '6'
+- '7'
+cache:
+  directories:
+  - node_modules
+before_install:
+- npm i -g npm@$(node -p "require('./package').engines.npm")
+script:
+- make lint
+- make test
+after_success:
+- make coveralls
+- '[[ -n "$TRAVIS_TAG" ]] && make gh-pages'
+before_deploy:
+- rm -r media
+deploy:
+  provider: npm
+  email: rr.rossmann@gmail.com
+  api_key:
+    secure: ab6KQPc/4ASdXOkbIu0A1Eg9dJrTZsVUt/tK3NK8478f/hhxJAxC4DGkZuDVzAtvncSIUMgAzaE9/8l2ccLYGkLxT4dqtV2l0fyb31cpDL6Wziuv7jAQPwHDcuQkuK9le4wI8KHI0ClSrt9LADvlsWT/qssW9LDauqkuQn5PMkCNzkRVDyv7ua7OPjC8KtD1HMYMMZQ31olnFBtaR7a1PpUhCxj1JkaoP5fl5jE2EKFo85Gq6oi0q4UmXmrZyQ69K/5Vo57XcbiIv5t4qohcgOsDwZSW9XMb6H66hjbERmERMshsTS/fvAuyUSUncaD5d0DHfUzgXY+pxev/RYQ8E2AsuhovPnJAtqpuqao9Vy8isZQ3Go52f7M0jsg6+wY14b9/ApWT17n6mN789td/LdLJCTeOwh7rv1Hfc1qSmPULksxHk07SFAKq6EC+3JfHTPX9dghpfT3UhdBqCOr1Fl1wZ40DbI/bXaram0JLn+O1QL11hQQ3Dfzwae+ljj8cMpeUo1RHfWQuGI8U4lm2Ost5PPfUC+m78r/UlqpcASQ+MTNbxXNw2VW6C1ODqjtf+XOp5q1mKsU+xB3DcKZz60g5McyP8y8Z2d1t7gMk9kkBTb89lFzJqwnw+/0IC+ZcTGR2Qkm3MZ2Rcs/hSh6+aea54T/JUG0C1dTfY5Y3HYs=
+  on:
+    tags: true
+    repo: nodestream/nodestream
+    node: '7'
+env:
+  global:
+    secure: t5gKDADYofYJYvaGmGgTpssh9Zvb0P0exSceKx9CaYEYtlFbdKUNhGZ9kHoBdrriJSM9yN9w5BUO6OQ0IVMFYkMYyw0zFj/OKuBoijGv2QhWDpoejjCaeZCJHJERDWl4UUzr9SnP49AVtfGuRv9LdwxcmquhBpnfYZnSf9NOwRQ5PuprVm34lxFF+qQAo9JW1IgtNn7cEqdbm8C7oC/OLDGJgDr0VBHiz5Qhaz7Rz63BcJA8rCTvqLmPgWssNF6dznsShnazAywxw2b4d2+FZ+wJL+wyRphceZOpV6DFovWVGnw56nyEuDnJI/5QfT0nHB0yL3Ljgz6iwgsQDu2TeRKmclgvLt56/xEzn6Y1ZgfLbXVrmcxZjGCTUd58inkXEBRIJM3Khk/E2sSUx6RHrFuCVTqOjHseqt/dazKBE6RJ4FhXh/AJSjspoSzXA/wlXRh5nrqSNvLbvPM0fzVjoz8JJ/PwXaRGivdbtOQnpOT7JsAl5zLrbIAYuPm0X7kPGgW88ctzqNI5QXURPb1mSpk9K1tTUVLJNCYyWhKz5POq57Rza12Pt7SFnIcWDpYArVqb8lA45Akb4uv9M1udBtHjyu8hEMJZVHZVe3Np7QKOXo9vFcIQ8cAryu7SUd+6H1ZtmzeNvo3j77SwOY3YbHxQVRgPdn/Wt07xQNFc4ho=

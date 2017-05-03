@@ -1,0 +1,36 @@
+{
+  "name": "nodestream",
+  "description": "Streaming library for binary data transfers",
+  "version": "0.7.4",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "rr.rossmann@me.com"
+  },
+  "bugs": {
+    "url": "https://github.com/nodestream/nodestream/issues"
+  },
+  "contributors": [],
+  "dependencies": {
+    "uuid": "^3.0.1"
+  },
+  "engines": {
+    "npm": ">=3",
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/nodestream/nodestream",
+  "keywords": [
+    "download",
+    "stream",
+    "streaming",
+    "upload",
+    "storage",
+    "blob",
+    "nodestream"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/nodestream",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodestream/nodestream.git"
+  }
+}
