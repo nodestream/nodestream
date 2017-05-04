@@ -162,11 +162,15 @@ describe('Class: Nodestream', () => {
     it('should pass the location to the adapter', done => {
       DummyAdapter.prototype.createReadStream = location => {
         expect(location).to.equal('fake/location')
+        const source = new stream.PassThrough()
+        setImmediate(() => source.end())
 
-        return done()
+        return source
       }
 
       storage.download('fake/location', new stream.PassThrough())
+        .then(() => done())
+        .catch(done)
     })
 
     it('should return ES 2015 Promise', () => {

@@ -166,7 +166,7 @@ describe('Adapter', () => {
     })
 
     it('should return Promise', () => {
-      expect(adapter.remove()).to.be.instanceof(Promise)
+      expect(adapter.remove('test.txt')).to.be.instanceof(Promise)
     })
 
     it('should remove the file from a location relative to root', () => {

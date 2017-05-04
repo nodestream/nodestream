@@ -16,6 +16,19 @@ const Adapter = require('../lib/nodestream-gridfs')
 
 const GridFSProto = mongodb.GridFSBucket.prototype
 
+function mkadapter() {
+  return new Adapter({
+    db: {
+      // eslint-disable-next-line id-length
+      s: {},
+      collection: sinon.stub().returns({
+        // eslint-disable-next-line id-length
+        deleteOne: sinon.stub().callsArgWithAsync(1, null, { result: { n: true } }),
+        deleteMany: sinon.stub().callsArgWithAsync(1, null, {}),
+      }),
+    },
+  })
+}
 
 describe('Adapter', () => {
   it('should be a class', () => {
@@ -32,13 +45,7 @@ describe('Adapter', () => {
     let adapter
 
     beforeEach(() => {
-      adapter = new Adapter({
-        db: {
-          // eslint-disable-next-line id-length
-          s: {},
-          collection: sinon.stub(),
-        },
-      })
+      adapter = mkadapter()
     })
 
 
@@ -100,13 +107,7 @@ describe('Adapter', () => {
     let adapter
 
     beforeEach(() => {
-      adapter = new Adapter({
-        db: {
-          // eslint-disable-next-line id-length
-          s: {},
-          collection: sinon.stub(),
-        },
-      })
+      adapter = mkadapter()
     })
 
 
@@ -150,13 +151,7 @@ describe('Adapter', () => {
     let stubFind
 
     beforeEach(() => {
-      adapter = new Adapter({
-        db: {
-          // eslint-disable-next-line id-length
-          s: {},
-          collection: sinon.stub(),
-        },
-      })
+      adapter = mkadapter()
       stub = sinon.stub(GridFSProto, 'delete').returns(Promise.resolve())
       stubFind = sinon.stub(GridFSProto, 'find').returns({
         toArray: sinon.stub().callsArgWithAsync(0, null, [{ _id: 123 }]),
@@ -175,7 +170,7 @@ describe('Adapter', () => {
     })
 
     it('should return Promise', () => {
-      expect(adapter.remove()).to.be.instanceof(Promise)
+      expect(adapter.remove('test.txt')).to.be.instanceof(Promise)
     })
 
     it('should remove the file from the location by looking up the location\'s ID', () =>
@@ -194,7 +189,9 @@ describe('Adapter', () => {
       const dummyErr = new Error('fail!')
 
       stub.restore()
-      stub = sinon.stub(GridFSProto, 'delete').returns(Promise.reject(dummyErr))
+      stub = sinon.stub(GridFSProto, 'delete').callsFake(() => {
+        throw dummyErr
+      })
 
       return adapter.remove('fake/test.txt')
       .then(() => { throw new Error('Removal should have been rejected') })
