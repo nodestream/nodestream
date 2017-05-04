@@ -13,9 +13,9 @@ before_install:
 install: make install
 script:
 - make lint
-- make test
+- make test-all
 after_success:
-# - make coveralls
+- make coveralls
 # - '[[ -n "$TRAVIS_TAG" ]] && make gh-pages'
 # before_deploy:
 # - rm -r media

@@ -1,0 +1,12 @@
+{
+  "check-coverage": true,
+  "all": true,
+  "exclude": [
+    "**/*.spec.js",
+    "coverage"
+  ],
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ]
+}

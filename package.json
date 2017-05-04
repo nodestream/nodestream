@@ -15,9 +15,11 @@
     "@strv/eslint-config-javascript": "^6.5.0",
     "chai": "3.5.0",
     "chai-as-promised": "^6.0.0",
+    "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
     "lerna": "^2.0.0-rc.4",
     "mocha": "3.3.0",
+    "nyc": "^10.3.0",
     "sinon": "2.2.0"
   },
   "engines": {

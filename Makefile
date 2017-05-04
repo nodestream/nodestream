@@ -1,10 +1,5 @@
 bin = node_modules/.bin/
-pkgs = packages
-
-test-adapters = filesystem-test gcs-test gridfs-test s3-test
-test-transforms = transform-checksum-test transform-compress-test transform-progress-test
-test-deps = nodestream-test $(test-adapters) $(test-transforms)
-
+targets := $(wildcard packages/*/test)
 # Put this into your local.mk to add extra flags for Mocha
 # test-glags = --inspect
 
@@ -15,35 +10,22 @@ node_modules: package.json
 	npm install
 
 lint:
-	$(bin)eslint $(pkgs)
+	$(bin)eslint packages
 
-test: $(test-deps)
+test-all: $(targets)
 
-nodestream-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream/test
+packages/*/test:
+	$(bin)mocha --opts mocha.opts $(test-flags) $@
 
-filesystem-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-filesystem/test
+coverage:
+	$(bin)nyc $(MAKE) test-all
 
-gcs-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-gcs/test
-
-gridfs-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-gridfs/test
-
-s3-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-s3/test
-
-transform-checksum-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-transform-checksum/test
-
-transform-compress-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-transform-compress/test
-
-transform-progress-test:
-	$(bin)mocha --opts mocha.opts $(test-flags) $(pkgs)/nodestream-transform-progress/test
+coveralls: coverage
+	cat coverage/lcov.info | $(bin)coveralls
 
 # This file allows local Make target customisations without having to worry about them being
 # accidentally commited to this file. local.mk is in gitignore. If this file does not exist, make
 # Make not to panic.
 -include local.mk
+
+.PHONY: coverage $(targets)
