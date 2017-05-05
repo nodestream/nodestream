@@ -6,15 +6,18 @@ targets := $(wildcard packages/*/test)
 install: node_modules
 	$(bin)lerna bootstrap
 
+compile: install
+	$(bin)babel packages --out-dir packages --source-maps both --ignore node_modules --quiet
+
 node_modules: package.json
 	npm install
 
 lint:
-	$(bin)eslint packages
+	$(bin)eslint --ext .es packages
 
 test-all: $(targets)
 
-packages/*/test:
+packages/*/test: compile
 	$(bin)mocha --opts mocha.opts $(test-flags) $@
 
 coverage:
@@ -23,9 +26,22 @@ coverage:
 coveralls: coverage
 	cat coverage/lcov.info | $(bin)coveralls
 
+clean:
+	rm -rf .nyc_output
+	rm -rf coverage
+	rm -rf docs
+
+# Delete all the .js and .js.map files (excluding any potential dotfiles with .js extension)
+distclean: clean
+	@find packages \
+		-not -path "*/node_modules/*" \
+		-not -name '.*.js' \
+		\( -name '*.js' -or -name '*.js.map' \) \
+		-print -delete
+
 # This file allows local Make target customisations without having to worry about them being
 # accidentally commited to this file. local.mk is in gitignore. If this file does not exist, make
 # Make not to panic.
 -include local.mk
 
-.PHONY: coverage $(targets)
+.PHONY: compile lint coverage $(targets)
