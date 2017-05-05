@@ -16,7 +16,7 @@
   },
   "engines": {
     "npm": ">=3",
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "homepage": "https://github.com/nodestream/nodestream-s3",
   "keywords": [

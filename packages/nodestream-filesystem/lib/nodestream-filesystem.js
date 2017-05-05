@@ -50,7 +50,7 @@ class Filesystem {
 
     // Allows for specifying root as [__dirname, '.storage'] etc.
     if (config.root instanceof Array) {
-      config.root = path.join.apply(path, config.root)
+      config.root = path.join(...config.root)
     }
 
     config.root = path.normalize(config.root)
