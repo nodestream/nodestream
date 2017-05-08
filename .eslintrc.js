@@ -10,6 +10,8 @@
 
 module.exports = {
 
+  parser: 'babel-eslint',
+
   extends: [
     '@strv/javascript/environments/nodejs/v6',
     '@strv/javascript/environments/nodejs/optional',
