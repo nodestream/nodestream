@@ -6,15 +6,13 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const sinon = require('sinon')
-const fs = require('fs')
-const mkdirp = require('mkdirp')
-const path = require('path')
-const stream = require('stream')
-const Adapter = require('../lib/nodestream-filesystem')
+import { expect } from 'chai'
+import sinon from 'sinon'
+import fs from 'fs'
+import mkdirp from 'mkdirp'
+import path from 'path'
+import stream from 'stream'
+import Adapter from '../lib/nodestream-filesystem'
 
 
 describe('Adapter', () => {

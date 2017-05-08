@@ -6,13 +6,12 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import stream from 'stream'
+import Adapter from '../lib/nodestream-gcs'
+import gcs from '@google-cloud/storage'
 
-const expect = require('chai').expect
-const sinon = require('sinon')
-const stream = require('stream')
-const Adapter = require('../lib/nodestream-gcs')
-const gcs = require('@google-cloud/storage')
 // Access the File prototype so we can stub it
 const file = gcs({ projectId: 'x' })
              .bucket('x')

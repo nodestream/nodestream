@@ -6,11 +6,9 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const AWS = require('aws-sdk')
-const stream = require('stream')
-const merge = require('semantic-merge')
+import AWS from 'aws-sdk'
+import stream from 'stream'
+import merge from 'semantic-merge'
 
 const scope = Symbol('nodestream internal')
 
@@ -18,7 +16,7 @@ const scope = Symbol('nodestream internal')
 /**
  * AWS S3 adapter for Nodestream
  */
-class S3 {
+export default class S3 {
 
   static get identity() {
     return 's3'
@@ -127,5 +125,3 @@ class S3 {
     })
   }
 }
-
-module.exports = S3

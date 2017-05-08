@@ -6,12 +6,10 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const sinon = require('sinon')
-const stream = require('stream')
-const Progress = require('../lib/progress')
+import { expect } from 'chai'
+import sinon from 'sinon'
+import stream from 'stream'
+import Progress from '../lib/progress'
 
 describe('Class: Progress', () => {
   let progress

@@ -6,17 +6,16 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
 
-const Pipeline = require('./pipeline')
-const isInstalled = require('./util/is-installed')
+import Pipeline from './pipeline'
+import { isInstalled } from './utils'
 
 const scope = Symbol('nodestream internal')
 
 /**
  * The Nodestream class. Responsible for streaming your bytes up and down, relentlessly.
  */
-class Nodestream {
+export default class Nodestream {
 
   /**
    * Create a new instance
@@ -168,5 +167,3 @@ class Nodestream {
     return this
   }
 }
-
-module.exports = Nodestream

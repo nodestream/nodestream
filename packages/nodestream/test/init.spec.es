@@ -6,8 +6,6 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const chai = require('chai')
+import chai from 'chai'
 
 chai.use(require('chai-as-promised'))

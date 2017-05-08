@@ -6,12 +6,10 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const sinon = require('sinon')
-const stream = require('stream')
-const Nodestream = require('../lib/nodestream')
+import { expect } from 'chai'
+import sinon from 'sinon'
+import stream from 'stream'
+import Nodestream from '../lib/nodestream'
 
 
 describe('Feature: Transformers', () => {

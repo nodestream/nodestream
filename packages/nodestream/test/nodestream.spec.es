@@ -6,11 +6,9 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const Nodestream = require('../lib/nodestream')
-const stream = require('stream')
+import { expect } from 'chai'
+import Nodestream from '../lib/nodestream'
+import stream from 'stream'
 
 describe('Class: Nodestream', () => {
   let DummyAdapter

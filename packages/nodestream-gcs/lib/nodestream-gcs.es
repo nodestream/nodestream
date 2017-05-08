@@ -6,9 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const gcs = require('@google-cloud/storage')
+import gcs from '@google-cloud/storage'
 
 const scope = Symbol('nodestream internal')
 
@@ -16,7 +14,7 @@ const scope = Symbol('nodestream internal')
 /**
  * Google Cloud Storage adapter for Nodestream
  */
-class Gcs {
+export default class Gcs {
 
   static get identity() {
     return 'gcs'
@@ -84,5 +82,3 @@ class Gcs {
     })
   }
 }
-
-module.exports = Gcs

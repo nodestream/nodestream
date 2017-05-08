@@ -6,15 +6,13 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import stream from 'stream'
+import AWS from 'aws-sdk'
+import Adapter from '../lib/nodestream-s3'
 
-const expect = require('chai').expect
-const sinon = require('sinon')
-const stream = require('stream')
-const S3 = require('aws-sdk').S3
-
-const s3proto = Object.getPrototypeOf(new S3())
-const Adapter = require('../lib/nodestream-s3')
+const s3proto = Object.getPrototypeOf(new AWS.S3())
 
 
 describe('Adapter', () => {

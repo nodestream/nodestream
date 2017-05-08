@@ -6,9 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const zlib = require('zlib')
+import zlib from 'zlib'
 
 const scope = Symbol('nodestream internal')
 
@@ -16,7 +14,7 @@ const scope = Symbol('nodestream internal')
 /**
  * Compress transform for Nodestream
  */
-class Compress {
+export default class Compress {
 
   /**
    * This transform's identity
@@ -112,5 +110,3 @@ class Compress {
     return this[scope].config
   }
 }
-
-module.exports = Compress

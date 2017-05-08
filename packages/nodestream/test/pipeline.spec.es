@@ -6,10 +6,8 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const Pipeline = require('../lib/pipeline')
+import { expect } from 'chai'
+import Pipeline from '../lib/pipeline'
 
 describe('Class: Pipeline', () => {
   it('is a class', () => {

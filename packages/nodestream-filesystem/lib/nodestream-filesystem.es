@@ -6,12 +6,10 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const fs = require('fs')
-const stream = require('stream')
-const path = require('path')
-const mkdirp = require('mkdirp')
+import fs from 'fs'
+import stream from 'stream'
+import path from 'path'
+import mkdirp from 'mkdirp'
 
 const scope = Symbol('nodestream internal')
 
@@ -19,7 +17,7 @@ const scope = Symbol('nodestream internal')
 /**
  * Filesystem adapter for Nodestream
  */
-class Filesystem {
+export default class Filesystem {
 
   static get identity() {
     return 'filesystem'
@@ -132,5 +130,3 @@ class Filesystem {
     })
   }
 }
-
-module.exports = Filesystem

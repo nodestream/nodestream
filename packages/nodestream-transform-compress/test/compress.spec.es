@@ -6,12 +6,10 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const stream = require('stream')
-const zlib = require('zlib')
-const Compress = require('../lib/compress')
+import { expect } from 'chai'
+import stream from 'stream'
+import zlib from 'zlib'
+import Compress from '../lib/compress'
 
 describe('Class: Compress', () => {
   let compress

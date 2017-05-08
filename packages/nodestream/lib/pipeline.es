@@ -6,19 +6,18 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
 
-const path = require('path')
-const stream = require('stream')
-const Domain = require('domain').Domain
-const uuid = require('uuid')
+import path from 'path'
+import stream from 'stream'
+import { Domain } from 'domain'
+import uuid from 'uuid'
 
 const scope = Symbol('nodestream internal')
 
 /**
  * Pipeline - a set of ordered transforms
  */
-class Pipeline {
+export default class Pipeline {
 
   /**
    * Create a new pipeline
@@ -210,5 +209,3 @@ class Pipeline {
     .then(() => location)
   }
 }
-
-module.exports = Pipeline

@@ -6,10 +6,8 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const stream = require('stream')
-const mongodb = require('mongodb')
+import stream from 'stream'
+import mongodb from 'mongodb'
 
 const scope = Symbol('nodestream internal')
 
@@ -17,7 +15,7 @@ const scope = Symbol('nodestream internal')
 /**
  * GridFS adapter for Nodestream
  */
-class GridFS {
+export default class GridFS {
 
   static get identity() {
     return 'gridfs'
@@ -139,8 +137,6 @@ class GridFS {
     })
   }
 }
-
-module.exports = GridFS
 
 
 /**

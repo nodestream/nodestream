@@ -6,9 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const Monitor = require('./monitor')
+import Monitor from './monitor'
 
 const scope = Symbol('nodestream internal')
 
@@ -16,7 +14,7 @@ const scope = Symbol('nodestream internal')
 /**
  * Progress monitor for Nodestream
  */
-class Progress {
+export default class Progress {
 
   /**
    * This transform's identity
@@ -126,5 +124,3 @@ class Progress {
     }
   }
 }
-
-module.exports = Progress

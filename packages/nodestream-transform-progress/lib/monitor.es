@@ -6,14 +6,13 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
 
-const stream = require('stream')
+import stream from 'stream'
 
 /**
  * Progress monitor
  */
-class Monitor extends stream.Transform {
+export default class Monitor extends stream.Transform {
 
   _transform(data, encoding, done) {
     this.emit('progress', data.length)
@@ -21,5 +20,3 @@ class Monitor extends stream.Transform {
     return done(null, data)
   }
 }
-
-module.exports = Monitor

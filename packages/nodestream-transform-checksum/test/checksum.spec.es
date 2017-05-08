@@ -6,11 +6,9 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const expect = require('chai').expect
-const stream = require('stream')
-const Checksum = require('../lib/checksum')
+import { expect } from 'chai'
+import stream from 'stream'
+import Checksum from '../lib/checksum'
 
 describe('Class: Checksum', () => {
   let checksum

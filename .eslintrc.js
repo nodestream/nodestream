@@ -18,6 +18,10 @@ module.exports = {
     '@strv/javascript/coding-styles/recommended',
   ],
 
+  parserOptions: {
+    sourceType: 'module',
+  },
+
   rules: {
     // If your editor cannot show these to you, occasionally turn this off and run the linter
     'no-warning-comments': 0

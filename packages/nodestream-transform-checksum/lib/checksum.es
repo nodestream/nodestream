@@ -6,10 +6,8 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
-const crypto = require('crypto')
-const stream = require('stream')
+import crypto from 'crypto'
+import stream from 'stream'
 
 const scope = Symbol('nodestream internal')
 
@@ -17,7 +15,7 @@ const scope = Symbol('nodestream internal')
 /**
  * Checksum calculator for Nodestream
  */
-class Checksum {
+export default class Checksum {
 
   /**
    * This transform's identity
@@ -83,5 +81,3 @@ class Checksum {
     }
   }
 }
-
-module.exports = Checksum

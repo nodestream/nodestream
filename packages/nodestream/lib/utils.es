@@ -6,8 +6,6 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
-
 /**
  * Check if a module is installed
  *
@@ -15,7 +13,7 @@
  * @param     {String}    moduleName    The module name to check
  * @return    {Boolean}
  */
-module.exports = function isInstalled(moduleName) {
+function isInstalled(moduleName) {
   try {
     // eslint-disable-next-line global-require
     require.resolve(moduleName)
@@ -24,4 +22,8 @@ module.exports = function isInstalled(moduleName) {
   } catch (err) {
     return false
   }
+}
+
+export {
+  isInstalled,
 }

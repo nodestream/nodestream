@@ -6,13 +6,12 @@
  * @license     BSD-3-Clause
  */
 
-'use strict'
 
-const expect = require('chai').expect
-const sinon = require('sinon')
-const mongodb = require('mongodb')
-const stream = require('stream')
-const Adapter = require('../lib/nodestream-gridfs')
+import { expect } from 'chai'
+import sinon from 'sinon'
+import mongodb from 'mongodb'
+import stream from 'stream'
+import Adapter from '../lib/nodestream-gridfs'
 
 const GridFSProto = mongodb.GridFSBucket.prototype
 
