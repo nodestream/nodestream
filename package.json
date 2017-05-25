@@ -31,7 +31,7 @@
     "source-map-support": "^0.4.15"
   },
   "engines": {
-    "npm": ">=3",
+    "npm": ">=5",
     "node": ">=6.0.0"
   },
   "homepage": "https://github.com/nodestream/nodestream",
