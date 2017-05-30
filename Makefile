@@ -6,6 +6,10 @@ targets := $(wildcard packages/*/test)
 install: node_modules
 	$(bin)lerna bootstrap
 
+pristine: distclean
+	rm -r node_modules
+	find packages -maxdepth 2 -name node_modules -type d -print -delete
+
 compile: install
 	$(bin)babel packages --out-dir packages --source-maps both --ignore node_modules --quiet
 
@@ -15,7 +19,7 @@ node_modules: package.json
 lint:
 	$(bin)eslint --ext .es packages
 
-test-all: $(targets)
+test: $(targets)
 
 packages/*/test: compile
 	$(bin)mocha --opts mocha.opts $(test-flags) $@
