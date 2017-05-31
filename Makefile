@@ -7,8 +7,8 @@ install: node_modules
 	$(bin)lerna bootstrap
 
 pristine: distclean
-	rm -r node_modules
-	find packages -maxdepth 2 -name node_modules -type d -print -delete
+	@rm -rf node_modules
+	@find packages -maxdepth 2 -name node_modules -type d -print -exec rm -rf {} \;
 
 compile: install
 	$(bin)babel packages --out-dir packages --source-maps both --ignore node_modules --quiet
