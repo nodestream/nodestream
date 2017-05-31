@@ -55,8 +55,8 @@ This library aims to provide a unified API for all the major storage systems out
 > See [Pipelines and Transforms](#pipelines-and-transforms) section for more info.
 
 | [checksum][ns-checksum] | [compress][ns-compress] | [progress][ns-progress] | crypto (WIP)           |
-|:-----------------------:|:-----------------------:|:----------------------:|:----------------------:|
-| Checksum Calculator     | Stream (de)compressor   | Progress monitor       | Stream (en/de)cryption |
+|:-----------------------:|:-----------------------:|:-----------------------:|:----------------------:|
+| Checksum Calculator     | Stream (de)compressor   | Progress monitor        | Stream (en/de)cryption |
 
 ## Usage
 
