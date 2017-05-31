@@ -13,7 +13,7 @@ before_install:
 install: make install
 script:
 - make lint
-- make test-all
+- make test
 after_success:
 - make coveralls
 # - '[[ -n "$TRAVIS_TAG" ]] && make gh-pages'
