@@ -8,17 +8,17 @@
 [inch-url]: http://inch-ci.org/github/nodestream/nodestream
 [make-badge]: https://img.shields.io/badge/built%20with-GNU%20Make-brightgreen.svg
 [apidocs-url]: https://nodestream.github.io/nodestream
-[ns-fs]: https://github.com/nodestream/nodestream-filesystem
+[ns-fs]: packages/nodestream-filesystem
 [fs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901081/d81b824c-ee17-11e5-8fbe-40eff40646f7.png
-[ns-s3]: https://github.com/nodestream/nodestream-s3
+[ns-s3]: packages/nodestream-s3
 [s3-icon]: https://cloud.githubusercontent.com/assets/3058150/13901098/80692616-ee18-11e5-98c1-91c35b936c51.png
-[ns-gridfs]: https://github.com/nodestream/nodestream-gridfs
+[ns-gridfs]: packages/nodestream-gridfs
 [gridfs-icon]: https://cloud.githubusercontent.com/assets/3058150/13901696/59652146-ee2c-11e5-8c7e-3cba5ba9854c.png
-[ns-gcs]: https://github.com/nodestream/nodestream-gcs
+[ns-gcs]: packages/nodestream-gcs
 [gcs-icon]: https://cloud.githubusercontent.com/assets/3058150/13907413/bfb554e0-eeed-11e5-9e51-ce490fad8abd.png
-[ns-checksum]: https://github.com/nodestream/nodestream-transform-checksum
-[ns-compress]: https://github.com/nodestream/nodestream-transform-compress
-[ns-progress]: https://github.com/nodestream/nodestream-transform-progress
+[ns-checksum]: packages/nodestream-transform-checksum
+[ns-compress]: packages/nodestream-transform-compress
+[ns-progress]: packages/nodestream-transform-progress
 
 # Nodestream <img src="https://raw.githubusercontent.com/nodestream/nodestream/master/media/artwork/nodestream.png" width="150px" alt="Nodestream logo" title="Nodestream" />
 
