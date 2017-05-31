@@ -25,7 +25,7 @@ packages/*/test: compile
 	$(bin)mocha --opts mocha.opts $(test-flags) $@
 
 coverage:
-	$(bin)nyc $(MAKE) test-all
+	$(bin)nyc $(MAKE) test
 
 coveralls: coverage
 	cat coverage/lcov.info | $(bin)coveralls
