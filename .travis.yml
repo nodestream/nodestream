@@ -10,7 +10,9 @@ cache:
   - node_modules
 before_install:
 - npm i -g npm@$(node -p "require('./package').engines.npm")
-install: make install
+install:
+- npm install
+- make install
 script:
 - make lint
 - make test
