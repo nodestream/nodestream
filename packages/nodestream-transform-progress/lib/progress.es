@@ -16,7 +16,6 @@ const scope = Symbol('nodestream internal')
  * Progress monitor for Nodestream
  */
 export default class Progress {
-
   /**
    * This transform's identity
    *

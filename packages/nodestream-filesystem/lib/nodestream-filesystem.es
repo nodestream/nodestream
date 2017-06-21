@@ -18,7 +18,6 @@ const scope = Symbol('nodestream internal')
  * Filesystem adapter for Nodestream
  */
 export default class Filesystem {
-
   static get identity() {
     return 'filesystem'
   }
@@ -82,8 +81,9 @@ export default class Filesystem {
         return destination.emit('error', err)
       }
 
-      const file = fs.createWriteStream(absolutePath, options)
-                   .once('error', fileErr => destination.emit('error', fileErr))
+      const file = fs
+        .createWriteStream(absolutePath, options)
+        .once('error', fileErr => destination.emit('error', fileErr))
 
       return destination.pipe(file)
     })

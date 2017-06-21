@@ -15,7 +15,6 @@ const scope = Symbol('nodestream internal')
  * Compress transform for Nodestream
  */
 export default class Compress {
-
   /**
    * This transform's identity
    *

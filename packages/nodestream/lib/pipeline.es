@@ -18,7 +18,6 @@ const scope = Symbol('nodestream internal')
  * Pipeline - a set of ordered transforms
  */
 export default class Pipeline {
-
   /**
    * Create a new pipeline
    *
@@ -205,7 +204,8 @@ export default class Pipeline {
       throw new TypeError(`Location must be string, got: ${location} (${typeof location})`)
     }
 
-    return Promise.resolve(this[scope].adapter.remove(location))
-    .then(() => location)
+    return Promise
+      .resolve(this[scope].adapter.remove(location))
+      .then(() => location)
   }
 }

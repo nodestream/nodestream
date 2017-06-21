@@ -63,9 +63,9 @@ describe('Feature: Transformers', () => {
       pipeline.upload(dummyFile),
       pipeline.upload(dummyFile),
     ])
-    .then(() => {
-      expect(spy.callCount).to.equal(2)
-    })
+      .then(() => {
+        expect(spy.callCount).to.equal(2)
+      })
   })
 
   it('creates new Transform instance for each file (download)', () => {
@@ -80,9 +80,9 @@ describe('Feature: Transformers', () => {
       pipeline.download('fake/location', new stream.PassThrough()),
       pipeline.download('fake/location', new stream.PassThrough()),
     ])
-    .then(() => {
-      expect(spy.callCount).to.equal(2)
-    })
+      .then(() => {
+        expect(spy.callCount).to.equal(2)
+      })
   })
 
 
@@ -91,15 +91,15 @@ describe('Feature: Transformers', () => {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
 
       return pipeline.upload(dummyFile)
-      .then(() => {
-        spy.restore()
-        expect(spy.callCount).to.equal(1)
-      })
-      .catch(err => {
-        spy.restore()
+        .then(() => {
+          spy.restore()
+          expect(spy.callCount).to.equal(1)
+        })
+        .catch(err => {
+          spy.restore()
 
-        throw err
-      })
+          throw err
+        })
     })
 
     it('should pass the configuration object to the transformer', () => {
@@ -119,25 +119,25 @@ describe('Feature: Transformers', () => {
 
     it('should gather transformation results and publish it to the results object', () =>
       expect(pipeline.upload(dummyFile))
-      .to.eventually.have.property('testidentity').and.to.equal(true))
+        .to.eventually.have.property('testidentity').and.to.equal(true))
 
     it('should make the transform appear in the list of applied transforms', () =>
       expect(pipeline.upload(dummyFile))
-      .to.eventually.have.property('transforms').which.contains(DummyTransform.identity))
+        .to.eventually.have.property('transforms').which.contains(DummyTransform.identity))
 
     it('passes per-file configuration options to the transformer', () => {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
       const transformOpts = { received: true }
 
       return pipeline.upload(dummyFile, { testidentity: transformOpts })
-      .then(() => {
-        expect(spy.getCall(0).args[1]).to.equal(transformOpts)
-      })
-      .catch(err => {
-        spy.restore()
+        .then(() => {
+          expect(spy.getCall(0).args[1]).to.equal(transformOpts)
+        })
+        .catch(err => {
+          spy.restore()
 
-        throw err
-      })
+          throw err
+        })
     })
   })
 
@@ -147,15 +147,15 @@ describe('Feature: Transformers', () => {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
 
       return pipeline.download('fake/location', new stream.PassThrough())
-      .then(() => {
-        spy.restore()
-        expect(spy.callCount).to.equal(1)
-      })
-      .catch(err => {
-        spy.restore()
+        .then(() => {
+          spy.restore()
+          expect(spy.callCount).to.equal(1)
+        })
+        .catch(err => {
+          spy.restore()
 
-        throw err
-      })
+          throw err
+        })
     })
 
     it('should pass the configuration object to the transformer', () => {
@@ -174,11 +174,11 @@ describe('Feature: Transformers', () => {
 
     it('should gather transformation results and publish it to the results object', () =>
       expect(pipeline.download('fake/location', new stream.PassThrough()))
-      .to.eventually.have.property('testidentity').and.to.equal(true))
+        .to.eventually.have.property('testidentity').and.to.equal(true))
 
     it('should make the transform appear in the list of applied transforms', () =>
       expect(pipeline.download('fake/location', new stream.PassThrough()))
-      .to.eventually.have.property('transforms').which.contains(DummyTransform.identity))
+        .to.eventually.have.property('transforms').which.contains(DummyTransform.identity))
 
     it('passes per-file configuration options to the transformer', () => {
       const spy = sinon.spy(DummyTransform.prototype, 'transform')
@@ -187,14 +187,14 @@ describe('Feature: Transformers', () => {
       return pipeline.download('fake/location', new stream.PassThrough(), {
         testidentity: transformOpts,
       })
-      .then(() => {
-        expect(spy.getCall(0).args[1]).to.equal(transformOpts)
-      })
-      .catch(err => {
-        spy.restore()
+        .then(() => {
+          expect(spy.getCall(0).args[1]).to.equal(transformOpts)
+        })
+        .catch(err => {
+          spy.restore()
 
-        throw err
-      })
+          throw err
+        })
     })
   })
 })

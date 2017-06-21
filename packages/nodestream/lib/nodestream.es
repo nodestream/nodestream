@@ -16,7 +16,6 @@ const scope = Symbol('nodestream internal')
  * The Nodestream class. Responsible for streaming your bytes up and down, relentlessly.
  */
 export default class Nodestream {
-
   /**
    * Create a new instance
    *

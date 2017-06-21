@@ -12,7 +12,6 @@ const scope = Symbol('stats internal')
  * Data structure representing the progress statistics
  */
 export default class Stats {
-
   /**
    * Private scope
    * @private

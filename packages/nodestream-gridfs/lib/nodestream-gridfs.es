@@ -16,7 +16,6 @@ const scope = Symbol('nodestream internal')
  * GridFS adapter for Nodestream
  */
 export default class GridFS {
-
   static get identity() {
     return 'gridfs'
   }
@@ -125,16 +124,16 @@ export default class GridFS {
           .toArray((findErr, files) => findErr ? reject(findErr) : resolve(files))
       })
     })
-    .then(files => {
-      const tasks = []
+      .then(files => {
+        const tasks = []
 
-      for (const file of files) {
+        for (const file of files) {
         // eslint-disable-next-line no-underscore-dangle
-        tasks.push(this[scope].adapter.delete(file._id))
-      }
+          tasks.push(this[scope].adapter.delete(file._id))
+        }
 
-      return Promise.all(tasks)
-    })
+        return Promise.all(tasks)
+      })
   }
 }
 

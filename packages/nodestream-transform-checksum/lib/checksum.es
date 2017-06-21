@@ -16,7 +16,6 @@ const scope = Symbol('nodestream internal')
  * Checksum calculator for Nodestream
  */
 export default class Checksum {
-
   /**
    * This transform's identity
    *

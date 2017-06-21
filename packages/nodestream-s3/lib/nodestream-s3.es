@@ -17,7 +17,6 @@ const scope = Symbol('nodestream internal')
  * AWS S3 adapter for Nodestream
  */
 export default class S3 {
-
   static get identity() {
     return 's3'
   }
@@ -65,8 +64,8 @@ export default class S3 {
       Bucket: bucket,
       Body: destination,
     })
-    .and(options.params || {})
-    .into({})
+      .and(options.params || {})
+      .into({})
 
     client.upload(params, s3options, err => {
       if (err) {
@@ -92,8 +91,8 @@ export default class S3 {
       Key: location,
       Bucket: bucket,
     })
-    .and(options || {})
-    .into({})
+      .and(options || {})
+      .into({})
     const request = client.getObject(params)
     const source = request.createReadStream()
 

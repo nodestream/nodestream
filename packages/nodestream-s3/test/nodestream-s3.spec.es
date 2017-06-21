@@ -159,12 +159,12 @@ describe('Adapter', () => {
 
     it('should resolve when the file is removed', done => {
       adapter.remove('test.txt')
-      .then(location => {
-        expect(location).to.equal('test.txt')
+        .then(location => {
+          expect(location).to.equal('test.txt')
 
-        return done()
-      })
-      .catch(done)
+          return done()
+        })
+        .catch(done)
     })
 
     it('should reject if the removal fails', done => {
@@ -174,13 +174,13 @@ describe('Adapter', () => {
       stubS3 = sinon.stub(s3proto, 'deleteObject').callsArgWith(1, dummyErr)
 
       adapter.remove('test.txt')
-      .then(() => done(new Error('Removal should have been rejected')))
-      .catch(err => {
-        expect(err).to.be.equal(dummyErr)
+        .then(() => done(new Error('Removal should have been rejected')))
+        .catch(err => {
+          expect(err).to.be.equal(dummyErr)
 
-        return done()
-      })
-      .catch(done)
+          return done()
+        })
+        .catch(done)
     })
   })
 })

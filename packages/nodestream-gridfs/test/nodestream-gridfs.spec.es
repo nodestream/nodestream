@@ -174,15 +174,15 @@ describe('Adapter', () => {
 
     it('should remove the file from the location by looking up the location\'s ID', () =>
       adapter.remove('fake/test.txt')
-      .then(() => {
-        expect(stub.firstCall.args[0]).to.equal(123)
-      }))
+        .then(() => {
+          expect(stub.firstCall.args[0]).to.equal(123)
+        }))
 
     it('should resolve when the file is removed', () =>
       adapter.remove('fake/test.txt')
-      .then(() => {
-        expect(stub.callCount).to.equal(1)
-      }))
+        .then(() => {
+          expect(stub.callCount).to.equal(1)
+        }))
 
     it('should reject if the removal fails', () => {
       const dummyErr = new Error('fail!')
@@ -193,10 +193,10 @@ describe('Adapter', () => {
       })
 
       return adapter.remove('fake/test.txt')
-      .then(() => { throw new Error('Removal should have been rejected') })
-      .catch(err => {
-        expect(err).to.be.equal(dummyErr)
-      })
+        .then(() => { throw new Error('Removal should have been rejected') })
+        .catch(err => {
+          expect(err).to.be.equal(dummyErr)
+        })
     })
   })
 })

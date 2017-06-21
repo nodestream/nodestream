@@ -65,7 +65,7 @@ describe('Class: Nodestream', () => {
 
   it('should attempt to require the adapter if only the adapter\'s name is given', () => {
     expect(() => new Nodestream({ adapter: 'filesystem' }))
-    .to.throw(/Cannot find adapter package nodestream-filesystem/)
+      .to.throw(/Cannot find adapter package nodestream-filesystem/)
   })
 
 
@@ -94,12 +94,12 @@ describe('Class: Nodestream', () => {
 
     it('should not replace the name if it was specified as string', () =>
       expect(storage.upload(dummyFile, { name: 'testfile' }))
-      .to.eventually.have.property('location', 'testfile'))
+        .to.eventually.have.property('location', 'testfile'))
 
     it('should generate a unique name if no name is provided', () =>
       expect(storage.upload(dummyFile, {}))
-      .to.eventually.have.property('location')
-      .and.be.a('string'))
+        .to.eventually.have.property('location')
+        .and.be.a('string'))
 
     it('should return ES 2015 Promise', () => {
       expect(storage.upload(dummyFile)).to.be.instanceof(Promise)
@@ -136,11 +136,11 @@ describe('Class: Nodestream', () => {
 
     it('should resolve with an object containing the upload results', () =>
       expect(storage.upload(dummyFile, {}))
-      .to.eventually.have.all.keys('location', 'transforms', 'adapter'))
+        .to.eventually.have.all.keys('location', 'transforms', 'adapter'))
 
     it('should resolve with the name of the adapter used for upload', () =>
       expect(storage.upload(dummyFile, {}))
-      .to.eventually.have.property('adapter', DummyAdapter.identity))
+        .to.eventually.have.property('adapter', DummyAdapter.identity))
   })
 
 
@@ -185,7 +185,7 @@ describe('Class: Nodestream', () => {
       }
 
       return expect(storage.download('fake/location', dummyDest))
-      .to.eventually.be.rejectedWith(Error, 'fail')
+        .to.eventually.be.rejectedWith(Error, 'fail')
     })
 
     it('should reject if the target emits error', () => {
@@ -194,7 +194,7 @@ describe('Class: Nodestream', () => {
       setImmediate(() => target.emit('error', new Error('fail')))
 
       return expect(storage.download('fake/location', target))
-      .to.eventually.be.rejectedWith(Error, 'fail')
+        .to.eventually.be.rejectedWith(Error, 'fail')
     })
 
     it('should resolve when the source stream ends', () => {
@@ -210,14 +210,14 @@ describe('Class: Nodestream', () => {
       setImmediate(() => dummyDest.end())
 
       return expect(storage.download('fake/location', dummyDest))
-      .to.eventually.have.all.keys('location', 'transforms', 'adapter')
+        .to.eventually.have.all.keys('location', 'transforms', 'adapter')
     })
 
     it('should resolve with the name of the adapter used for download', () => {
       setImmediate(() => dummyDest.end())
 
       return expect(storage.download('fake/location', dummyDest))
-      .to.eventually.have.property('adapter', DummyAdapter.identity)
+        .to.eventually.have.property('adapter', DummyAdapter.identity)
     })
 
     it('should pass adapter-specific options to the adapter', () => {
@@ -296,7 +296,7 @@ describe('Class: Nodestream', () => {
 
     it("should attempt to require the transform if only the transform's name is given", () => {
       expect(() => storage.registerTransform('checksum'))
-      .to.throw(/Cannot find transform package nodestream-transform-checksum/)
+        .to.throw(/Cannot find transform package nodestream-transform-checksum/)
     })
 
     it('should reject non-class/constructor function values', () => {

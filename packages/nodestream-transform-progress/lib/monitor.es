@@ -13,7 +13,6 @@ import stream from 'stream'
  * Progress monitor
  */
 export default class Monitor extends stream.Transform {
-
   _transform(data, encoding, done) {
     this.emit('progress', data.length)
 

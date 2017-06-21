@@ -15,7 +15,6 @@ const scope = Symbol('nodestream internal')
  * Google Cloud Storage adapter for Nodestream
  */
 export default class Gcs {
-
   static get identity() {
     return 'gcs'
   }
