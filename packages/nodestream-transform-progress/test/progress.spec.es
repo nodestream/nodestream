@@ -62,7 +62,7 @@ describe('Class: Progress', () => {
         expect(results).to.be.an('object')
         // Calculated by external utility
         expect(results).to.have.property('stats')
-        expect(results.stats).to.have.all.keys([
+        expect(Object.keys(results.stats)).to.have.members([
           'openedAt',
           'startedAt',
           'finishedAt',
