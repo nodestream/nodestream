@@ -3,7 +3,8 @@
   "all": true,
   "exclude": [
     "**/*.spec.js",
-    "coverage"
+    "coverage",
+    "docs"
   ],
   "reporter": [
     "lcov",
