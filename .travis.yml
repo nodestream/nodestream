@@ -11,7 +11,6 @@ cache:
 before_install:
 - npm i -g npm@$(node -p "require('./package').engines.npm")
 install:
-- npm install
 - make install
 script:
 - make lint
