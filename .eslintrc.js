@@ -13,14 +13,10 @@ module.exports = {
   parser: 'babel-eslint',
 
   extends: [
-    '@strv/javascript/environments/nodejs/v6',
+    '@strv/javascript/environments/nodejs/v8',
     '@strv/javascript/environments/nodejs/optional',
     '@strv/javascript/coding-styles/recommended',
   ],
-
-  parserOptions: {
-    sourceType: 'module',
-  },
 
   rules: {
     // If your editor cannot show these to you, occasionally turn this off and run the linter
