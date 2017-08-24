@@ -3,3 +3,5 @@
 --check-leaks
 --no-exit
 --require source-map-support/register
+--require test/init
+test packages/*/test/**/*.spec.js

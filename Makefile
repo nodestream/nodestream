@@ -1,51 +1,68 @@
-bin = node_modules/.bin/
-targets := $(wildcard packages/*/test)
-# Put this into your local.mk to add extra flags for Mocha
-# test-glags = --inspect
+# Defining shell is necessary in order to modify PATH
+SHELL := bash
+export PATH := node_modules/.bin/:$(PATH)
+export NODE_OPTIONS := --trace-deprecation --trace-warnings
 
-install: node_modules
-	$(bin)lerna bootstrap
+# Modify these variables in local.mk to add flags to the commands, ie.
+# testflags += --reporter nyan
+# Now mocha will be invoked with the extra flag and will show a nice nyan cat as progress bar 🎉
+testflags :=
+compileflags :=
+lintflags :=
+installflags :=
 
-pristine: distclean
-	@rm -rf node_modules
-	@find packages -maxdepth 2 -name node_modules -type d -print -exec rm -rf {} \;
+# Do this when make is invoked without targets
+all: compile
 
 compile: install
-	$(bin)babel packages --out-dir packages --source-maps both --ignore node_modules --quiet
+	babel . -q --extensions .es --source-maps both --out-dir . --ignore node_modules $(compileflags)
 
+# Note about `touch`:
+# npm does not update the timestamp of the node_modules folder itself. This confuses Make as it
+# thinks node_modules is not up to date and tries to constantly install pacakges. Touching
+# node_modules after installation fixes that.
 node_modules: package.json
-	npm install
+	npm install $(installflags) && \
+	lerna bootstrap --loglevel success && \
+	touch node_modules
+
+install: node_modules
 
 lint:
-	$(bin)eslint --ext .es packages
+	eslint --ext .es $(lintflags) .
 
-test: $(targets)
+test: compile
+	mocha $(testflags)
 
-packages/*/test: compile
-	$(bin)mocha --opts mocha.opts $(test-flags) $@
+test-debug: compile
+	mocha --inspect --inspect-brk $(testflags)
 
-coverage:
-	$(bin)nyc $(MAKE) test
+coverage: compile
+	nyc mocha $(testflags)
 
-coveralls: coverage
-	cat coverage/lcov.info | $(bin)coveralls
+publish: compile lint test
+	lerna publish --conventional-commits
 
 clean:
-	rm -rf .nyc_output
-	rm -rf coverage
-	rm -rf docs
+	rm -rf {.nyc_output,coverage,docs}
+
+unlock:
+	rm -rf packages/*/node_modules
+	find packages -name package-lock.json -print -delete
+	touch package.json
 
 # Delete all the .js and .js.map files (excluding any potential dotfiles with .js extension)
 distclean: clean
-	@find packages \
-		-not -path "*/node_modules/*" \
-		-not -name '.*.js' \
-		\( -name '*.js' -or -name '*.js.map' \) \
+	find packages test \
+		\( \
+			-name '*.js' -or -name '*.js.map' \
+		\) \
+		-not -path "*/node_modules/*" -not -name '.*.js' \
 		-print -delete
 
-# This file allows local Make target customisations without having to worry about them being
-# accidentally commited to this file. local.mk is in gitignore. If this file does not exist, make
-# Make not to panic.
--include local.mk
+pristine: distclean
+	rm -rf node_modules packages/*/node_modules
 
-.PHONY: compile lint coverage $(targets)
+.PHONY: install lint test test-debug docs clean distclean pristine
+
+-include local.mk
