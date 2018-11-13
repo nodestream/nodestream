@@ -116,8 +116,9 @@ export default class Pipeline {
         }, file)
 
       file.pipe(destination)
+      destination.once('error', reject)
 
-      destination.once('finish', () => {
+      destination.once(adapter.constructor.name === 'S3' ? 'uploaded' : 'finish', () => {
         for (const transformer of transforms) {
           result[transformer.constructor.identity] = transformer.results()
         }
