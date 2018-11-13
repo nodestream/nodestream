@@ -70,6 +70,8 @@ export default class S3 {
     client.upload(params, s3options, err => {
       if (err) {
         destination.emit('error', err)
+      } else {
+        destination.emit('uploaded')
       }
     })
 
