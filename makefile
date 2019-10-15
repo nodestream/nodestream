@@ -1,68 +1,88 @@
 # Defining shell is necessary in order to modify PATH
-SHELL := bash
+SHELL := sh
 export PATH := node_modules/.bin/:$(PATH)
-export NODE_OPTIONS := --trace-deprecation --trace-warnings
+export NODE_OPTIONS := --trace-deprecation
+
+# On CI servers, use the `npm ci` installer to avoid introducing changes to the package-lock.json
+# On developer machines, prefer the generally more flexible `npm install`. 💪
+NPM_I := $(if $(CI), ci, install)
 
 # Modify these variables in local.mk to add flags to the commands, ie.
-# testflags += --reporter nyan
+# MOCHA_FLAGS += --reporter nyan
 # Now mocha will be invoked with the extra flag and will show a nice nyan cat as progress bar 🎉
-testflags :=
-compileflags :=
-lintflags :=
-installflags :=
+MOCHA_FLAGS :=
+BABEL_FLAGS :=
+ESLINT_FLAGS :=
+NPM_FLAGS :=
+LERNA_FLAGS :=
+
+SRCFILES = $(shell utils/make/projectfiles.sh mjs)
+DSTFILES = $(patsubst %.mjs, %.js, $(SRCFILES))
+GITFILES = $(patsubst utils/githooks/%, .git/hooks/%, $(wildcard utils/githooks/*))
+TSTFILES = "packages/**/*.spec.js"
 
 # Do this when make is invoked without targets
-all: compile
+all: precompile $(GITFILES)
 
-compile: install
-	babel . --extensions .mjs --source-maps both --out-dir . --ignore node_modules $(compileflags)
 
-# Note about `touch`:
-# npm does not update the timestamp of the node_modules folder itself. This confuses Make as it
-# thinks node_modules is not up to date and tries to constantly install pacakges. Touching
-# node_modules after installation fixes that.
+# GENERIC TARGETS
+
 node_modules: package.json
-	npm install $(installflags) && \
-	lerna bootstrap --loglevel success && \
-	touch node_modules
+	npm $(NPM_I) $(NPM_FLAGS) && lerna bootstrap $(LERNA_FLAGS) && touch node_modules
 
-install: node_modules
+# Default compilation target for all source files
+%.js: %.mjs node_modules babel.config.js
+	babel $< --out-file $@ $(BABEL_FLAGS)
 
-lint:
-	eslint --ext .mjs $(lintflags) .
+# Default target for all possible git hooks
+.git/hooks/%: utils/githooks/%
+	cp $< $@
 
-test: compile
-	mocha $(testflags)
+coverage/lcov.info: $(DSTFILES)
+	nyc mocha $(MOCHA_FLAGS) $(TSTFILES)
 
-test-debug: compile
-	mocha --inspect --inspect-brk $(testflags)
 
-coverage: compile
-	nyc mocha $(testflags)
+# TASK DEFINITIONS
 
-publish: compile lint test
-	lerna publish --conventional-commits
+compile: $(DSTFILES)
 
-clean:
-	rm -rf {.nyc_output,coverage,docs}
+coverage: coverage/lcov.info
 
-unlock:
-	rm -rf packages/*/node_modules
-	find packages -name package-lock.json -print -delete
+precompile: install
+	babel . --extensions .mjs --out-dir . $(BABEL_FLAGS)
+
+install: node_modules $(GITFILES)
+
+lint: force install
+	eslint --cache --report-unused-disable-directives $(ESLINT_FLAGS) '**/*.mjs'
+	remark --quiet .
+
+test: force compile
+	mocha $(MOCHA_FLAGS) $(TSTFILES)
+
+inspect: force compile
+	mocha --inspect --inspect-brk $(MOCHA_FLAGS) $(TSTFILES)
+
+watch: force compile
+	mocha $(MOCHA_FLAGS) --watch $(TSTFILES)
+
+version:
+	lerna version $(LERNA_FLAGS)
+
+unlock: pristine
+	rm -f package-lock.json packages/*/package-lock.json
 	touch package.json
 
-# Delete all the .js and .js.map files (excluding any potential dotfiles with .js extension)
+clean:
+	rm -rf {.nyc_output,coverage,docs,.eslintcache}
+	find . -not -path '*/node_modules/*' -name '*.log' -print -delete
+
 distclean: clean
-	find packages test \
-		\( \
-			-name '*.js' -or -name '*.js.map' \
-		\) \
-		-not -path "*/node_modules/*" -not -name '.*.js' \
-		-print -delete
+	rm -f $(shell ./utils/make/projectfiles.sh js)
 
 pristine: distclean
 	rm -rf node_modules packages/*/node_modules
 
-.PHONY: install lint test test-debug docs clean distclean pristine
+.PHONY: force
 
 -include local.mk

@@ -6,7 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-import zlib from 'zlib'
+import * as zlib from 'zlib'
 
 const scope = Symbol('nodestream internal')
 

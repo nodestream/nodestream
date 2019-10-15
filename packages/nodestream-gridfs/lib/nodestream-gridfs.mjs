@@ -6,11 +6,39 @@
  * @license     BSD-3-Clause
  */
 
-import stream from 'stream'
-import mongodb from 'mongodb'
+import * as stream from 'stream'
+import * as mongodb from 'mongodb'
+
+/**
+ *  Get or create GridFSBucket adapter based on current context
+ *
+ *  @private
+ *  @param     {Object}       ctx     Current context, normally stored at `adapter[scope]`
+ *  @param     {Function}     done    Standard callback which receives the adapter
+ *  @return    {void}
+ */
+function getAdapter(ctx, done) {
+  if (ctx.adapter) {
+    return done(null, ctx.adapter)
+  }
+
+  // We do not have an adapter instance ready, so let's connect and create one!
+  return mongodb.connect(ctx.config.uri, ctx.config.connectOpts, (err, db) => {
+    if (err) {
+      return done(err)
+    }
+
+    ctx.adapter = new mongodb.GridFSBucket(db, {
+      chunkSizeBytes: ctx.config.chunkSize,
+      bucketName: ctx.config.bucket,
+    })
+
+    return done(null, ctx.adapter)
+  })
+}
+
 
 const scope = Symbol('nodestream internal')
-
 
 /**
  * GridFS adapter for Nodestream
@@ -135,33 +163,4 @@ export default class GridFS {
         return Promise.all(tasks)
       })
   }
-}
-
-
-/**
- *  Get or create GridFSBucket adapter based on current context
- *
- *  @private
- *  @param     {Object}       ctx     Current context, normally stored at `adapter[scope]`
- *  @param     {Function}     done    Standard callback which receives the adapter
- *  @return    {void}
- */
-function getAdapter(ctx, done) {
-  if (ctx.adapter) {
-    return setImmediate(done, null, ctx.adapter)
-  }
-
-  // We do not have an adapter instance ready, so let's connect and create one!
-  return mongodb.connect(ctx.config.uri, ctx.config.connectOpts, (err, db) => {
-    if (err) {
-      return done(err)
-    }
-
-    ctx.adapter = new mongodb.GridFSBucket(db, {
-      chunkSizeBytes: ctx.config.chunkSize,
-      bucketName: ctx.config.bucket,
-    })
-
-    return done(null, ctx.adapter)
-  })
 }

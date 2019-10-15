@@ -6,7 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-import gcs from '@google-cloud/storage'
+import * as gcs from '@google-cloud/storage'
 
 const scope = Symbol('nodestream internal')
 
@@ -76,8 +76,7 @@ export default class Gcs {
       const client = this[scope].client
 
       client.file(location).delete(err =>
-        err ? reject(err) : resolve(location)
-      )
+        err ? reject(err) : resolve(location))
     })
   }
 }

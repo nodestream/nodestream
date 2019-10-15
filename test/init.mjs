@@ -6,7 +6,7 @@
  * @license     BSD-3-Clause
  */
 
-import chai from 'chai'
+import * as chai from 'chai'
 
 // Make sure our tests always run in the 'test' environment
 // eslint-disable-next-line no-process-env

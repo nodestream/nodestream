@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "{packages,test}/**/*.{js,map}": true,
+    ".eslintcache": true,
+    ".nyc_output": true,
+  },
+  "javascript.validate.enable": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.lintTask.enable": true,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+}

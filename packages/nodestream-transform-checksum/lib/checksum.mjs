@@ -6,8 +6,8 @@
  * @license     BSD-3-Clause
  */
 
-import crypto from 'crypto'
-import stream from 'stream'
+import * as crypto from 'crypto'
+import * as stream from 'stream'
 
 const scope = Symbol('nodestream internal')
 

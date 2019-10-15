@@ -6,11 +6,11 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
 import { expect } from 'chai'
-import sinon from 'sinon'
-import stream from 'stream'
+import * as sinon from 'sinon'
+import * as gcs from '@google-cloud/storage'
 import Adapter from '../lib/nodestream-gcs'
-import gcs from '@google-cloud/storage'
 
 // Access the File prototype so we can stub it
 const file = gcs({ projectId: 'x' })

@@ -3,11 +3,13 @@ node_modules
 **/node_modules
 
 # Generated files
+.eslintcache
 coverage
 **/docs
 **/*.js
 **/*.js.map
 !**/.*.js
+!*.config.js
 # Fix bug in Atom's Tree View: https://github.com/atom/tree-view/issues/196
 **/*.spec.js
 
@@ -20,7 +22,7 @@ local.mk
 *.log
 *~
 *#
-.DS_STORE
+.DS_Store
 .netbeans
 nbproject
 .idea

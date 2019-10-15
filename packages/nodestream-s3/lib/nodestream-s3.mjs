@@ -6,9 +6,9 @@
  * @license     BSD-3-Clause
  */
 
-import AWS from 'aws-sdk'
-import stream from 'stream'
-import merge from 'semantic-merge'
+import * as stream from 'stream'
+import * as AWS from 'aws-sdk'
+import * as merge from 'semantic-merge'
 
 const scope = Symbol('nodestream internal')
 
@@ -119,8 +119,7 @@ export default class S3 {
       }
 
       client.deleteObject(params, err =>
-        err ? reject(err) : resolve(location)
-      )
+        err ? reject(err) : resolve(location))
     })
   }
 }

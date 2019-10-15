@@ -7,10 +7,10 @@
  */
 
 
-import path from 'path'
-import stream from 'stream'
+import * as path from 'path'
+import * as stream from 'stream'
 import { Domain } from 'domain'
-import uuid from 'uuid'
+import * as uuid from 'uuid'
 
 const scope = Symbol('nodestream internal')
 

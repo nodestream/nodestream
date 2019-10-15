@@ -6,10 +6,10 @@
  * @license     BSD-3-Clause
  */
 
-import fs from 'fs'
-import stream from 'stream'
-import path from 'path'
-import mkdirp from 'mkdirp'
+import * as fs from 'fs'
+import * as stream from 'stream'
+import * as path from 'path'
+import * as mkdirp from 'mkdirp'
 
 const scope = Symbol('nodestream internal')
 
@@ -125,8 +125,7 @@ export default class Filesystem {
       const root = this[scope].config.root
       const absolutePath = path.join(root, location)
 
-      return fs.unlink(absolutePath, err => err ? reject(err) : resolve(location)
-      )
+      return fs.unlink(absolutePath, err => err ? reject(err) : resolve(location))
     })
   }
 }

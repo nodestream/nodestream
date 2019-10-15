@@ -6,8 +6,8 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
 import { expect } from 'chai'
-import stream from 'stream'
 import Checksum from '../lib/checksum'
 
 describe('Class: Checksum', () => {

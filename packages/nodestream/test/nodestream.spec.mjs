@@ -6,9 +6,10 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
 import { expect } from 'chai'
+import * as sinon from 'sinon'
 import Nodestream from '../lib/nodestream'
-import stream from 'stream'
 
 describe('Class: Nodestream', () => {
   let DummyAdapter

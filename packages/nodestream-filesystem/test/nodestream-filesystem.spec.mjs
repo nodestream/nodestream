@@ -6,12 +6,12 @@
  * @license     BSD-3-Clause
  */
 
+import * as fs from 'fs'
+import * as path from 'path'
+import * as stream from 'stream'
 import { expect } from 'chai'
-import sinon from 'sinon'
-import fs from 'fs'
-import mkdirp from 'mkdirp'
-import path from 'path'
-import stream from 'stream'
+import * as sinon from 'sinon'
+import * as mkdirp from 'mkdirp'
 import Adapter from '../lib/nodestream-filesystem'
 
 
@@ -22,7 +22,7 @@ describe('Adapter', () => {
   })
 
   it('should reject relative root path', () => {
-    expect(() => new Adapter({ root: '.storage' })).to.throw(/root must be absolute/)
+    expect(() => new Adapter({ root: '.storage' })).to.throw(/root must be absolute/gu)
   })
 
   it('should support array of strings when specifying root', () => {

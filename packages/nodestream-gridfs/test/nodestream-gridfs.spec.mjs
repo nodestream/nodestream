@@ -7,10 +7,10 @@
  */
 
 
+import * as stream from 'stream'
 import { expect } from 'chai'
-import sinon from 'sinon'
-import mongodb from 'mongodb'
-import stream from 'stream'
+import * as sinon from 'sinon'
+import * as mongodb from 'mongodb'
 import Adapter from '../lib/nodestream-gridfs'
 
 const GridFSProto = mongodb.GridFSBucket.prototype

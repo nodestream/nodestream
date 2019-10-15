@@ -6,10 +6,10 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
 import { expect } from 'chai'
-import sinon from 'sinon'
-import stream from 'stream'
-import AWS from 'aws-sdk'
+import * as sinon from 'sinon'
+import * as AWS from 'aws-sdk'
 import Adapter from '../lib/nodestream-s3'
 
 const s3proto = Object.getPrototypeOf(new AWS.S3())

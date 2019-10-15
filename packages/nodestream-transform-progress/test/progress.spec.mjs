@@ -6,9 +6,9 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
 import { expect } from 'chai'
-import sinon from 'sinon'
-import stream from 'stream'
+import * as sinon from 'sinon'
 import Progress from '../lib/progress'
 
 describe('Class: Progress', () => {

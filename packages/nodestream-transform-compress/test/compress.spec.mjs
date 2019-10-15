@@ -6,9 +6,9 @@
  * @license     BSD-3-Clause
  */
 
+import * as stream from 'stream'
+import * as zlib from 'zlib'
 import { expect } from 'chai'
-import stream from 'stream'
-import zlib from 'zlib'
 import Compress from '../lib/compress'
 
 describe('Class: Compress', () => {
