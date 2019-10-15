@@ -21,6 +21,7 @@ function mkadapter() {
       // eslint-disable-next-line id-length
       s: {},
       collection: sinon.stub().returns({
+        findOne: sinon.stub().callsArgWithAsync(1, null, {}),
         // eslint-disable-next-line id-length
         deleteOne: sinon.stub().callsArgWithAsync(1, null, { result: { n: true } }),
         deleteMany: sinon.stub().callsArgWithAsync(1, null, {}),
@@ -30,6 +31,16 @@ function mkadapter() {
 }
 
 describe('Adapter', () => {
+  beforeEach(() => {
+    sinon.stub(GridFSProto, 'openDownloadStreamByName').returns(new stream.PassThrough())
+    sinon.stub(GridFSProto, 'openUploadStream').returns(new stream.PassThrough())
+  })
+
+  afterEach(() => {
+    sinon.restore()
+  })
+
+
   it('should be a class', () => {
     // Can't test for a class directly... 🙁
     expect(Adapter).to.be.a('function')
@@ -57,28 +68,22 @@ describe('Adapter', () => {
       expect(adapter.createWriteStream('fake/location')).to.be.instanceof(stream)
     })
 
-    it('should write the file to the given location', done => {
+    it('should write the file to the given location', () => {
       const destination = adapter.createWriteStream('fake/location')
-      const stub = sinon.stub(GridFSProto, 'openUploadStream').callsFake(location => {
-        stub.restore()
-        expect(location).to.equal('fake/location')
-
-        return done()
-      })
 
       destination.end()
+
+      const call = GridFSProto.openUploadStream.lastCall
+      expect(call.args[0]).to.equal('fake/location')
     })
 
-    it('should pass the second argument to the underlying adapter', done => {
+    it('should pass the second argument to the underlying adapter', () => {
       const destination = adapter.createWriteStream('fake/location', { test: true })
-      const stub = sinon.stub(GridFSProto, 'openUploadStream').callsFake((location, opts) => {
-        stub.restore()
-        expect(opts).to.have.property('test', true)
-
-        return done()
-      })
 
       destination.end()
+
+      const call = GridFSProto.openUploadStream.lastCall
+      expect(call.args[1]).to.have.property('test', true)
     })
 
     it('should connect to mongodb on first use when no database instance is given', done => {
@@ -86,7 +91,9 @@ describe('Adapter', () => {
       const mockDb = {
         // eslint-disable-next-line id-length
         s: {},
-        collection: sinon.stub(),
+        collection: sinon.stub().returns({
+          findOne: sinon.stub(),
+        }),
       }
       const connectStub = sinon.stub(mongodb, 'connect').callsArgWithAsync(2, null, mockDb)
       const destination = adapter.createWriteStream('fake/location', { test: true })
@@ -115,27 +122,18 @@ describe('Adapter', () => {
       expect(adapter.createReadStream).to.be.a('function')
     })
 
-    it('should read the file from the given location', done => {
-      const stub = sinon.stub(GridFSProto, 'openDownloadStreamByName').callsFake(location => {
-        stub.restore()
-        expect(location).to.equal('fake/test.txt')
-
-        return done()
-      })
-
+    it('should read the file from the given location', () => {
       adapter.createReadStream('fake/test.txt')
+
+      const call = GridFSProto.openDownloadStreamByName.lastCall
+      expect(call.args[0]).to.equal('fake/test.txt')
     })
 
-    it('should pass the second options parameter to the underlying adapter', done => {
-      const stub = sinon.stub(GridFSProto, 'openDownloadStreamByName')
-        .callsFake((location, opts) => {
-          stub.restore()
-          expect(opts).to.have.property('test', true)
-
-          return done()
-        })
-
+    it('should pass the second options parameter to the underlying adapter', () => {
       adapter.createReadStream('fake/test.txt', { test: true })
+
+      const call = GridFSProto.openDownloadStreamByName.lastCall
+      expect(call.args[1]).to.have.property('test', true)
     })
 
     it('should return a readable stream', () => {

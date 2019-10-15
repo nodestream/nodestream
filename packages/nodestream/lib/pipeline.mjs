@@ -104,16 +104,15 @@ export default class Pipeline {
       const transforms = []
 
       // Apply upload transforms
-      file = this[scope].middleware.reduce(
-        (upstream, transform) => {
-          const transformOpts = options[transform.Transformer.identity] || {}
-          const transformer = new transform.Transformer(transform.options)
-          const transformed = transformer.transform(upstream, transformOpts)
+      file = this[scope].middleware.reduce((upstream, transform) => {
+        const transformOpts = options[transform.Transformer.identity] || {}
+        const transformer = new transform.Transformer(transform.options)
+        const transformed = transformer.transform(upstream, transformOpts)
 
-          transforms.push(transformer)
+        transforms.push(transformer)
 
-          return transformed
-        }, file)
+        return transformed
+      }, file)
 
       file.pipe(destination)
 
@@ -168,16 +167,15 @@ export default class Pipeline {
       }
       const transforms = []
       // Apply download transforms and return the last returned stream
-      const source = this[scope].middleware.reduce(
-        (downstream, transform) => {
-          const transformOpts = options[transform.Transformer.identity] || {}
-          const transformer = new transform.Transformer(transform.options)
-          const transformed = transformer.transform(downstream, transformOpts)
+      const source = this[scope].middleware.reduce((downstream, transform) => {
+        const transformOpts = options[transform.Transformer.identity] || {}
+        const transformer = new transform.Transformer(transform.options)
+        const transformed = transformer.transform(downstream, transformOpts)
 
-          transforms.push(transformer)
+        transforms.push(transformer)
 
-          return transformed
-        }, adapter.createReadStream(location, adapterOpts))
+        return transformed
+      }, adapter.createReadStream(location, adapterOpts))
 
       source.pipe(destination)
 

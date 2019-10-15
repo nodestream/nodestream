@@ -41,16 +41,12 @@ describe('Class: Nodestream', () => {
     expect(() => new Nodestream({ adapter: DummyAdapter })).to.throw(ReferenceError)
   })
 
-  it('should instantiate the adapter', done => {
-    DummyAdapter = function() {
-      // eslint-disable-next-line no-invalid-this
-      expect(this).to.be.instanceof(DummyAdapter)
-
-      return done()
-    }
+  it('should instantiate the adapter', () => {
+    DummyAdapter = sinon.stub()
     DummyAdapter.identity = 'dummy'
 
-    return new Nodestream({ adapter: DummyAdapter })
+    void new Nodestream({ adapter: DummyAdapter })
+    expect(DummyAdapter.lastCall.calledWithNew()).to.equal(true)
   })
 
   it('should pass along the adapter configuration to the adapter', () => {
@@ -66,7 +62,7 @@ describe('Class: Nodestream', () => {
 
   it('should attempt to require the adapter if only the adapter\'s name is given', () => {
     expect(() => new Nodestream({ adapter: 'filesystem' }))
-      .to.throw(/Cannot find adapter package nodestream-filesystem/)
+      .to.throw(/Cannot find adapter package nodestream-filesystem/gu)
   })
 
 
@@ -297,7 +293,7 @@ describe('Class: Nodestream', () => {
 
     it("should attempt to require the transform if only the transform's name is given", () => {
       expect(() => storage.registerTransform('checksum'))
-        .to.throw(/Cannot find transform package nodestream-transform-checksum/)
+        .to.throw(/Cannot find transform package nodestream-transform-checksum/gu)
     })
 
     it('should reject non-class/constructor function values', () => {
