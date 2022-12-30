@@ -27,7 +27,7 @@
     "chai-as-promised": "^7.0.0",
     "eslint": "^6.5.1",
     "lerna": "^3.17.0",
-    "mocha": "^6.2.1",
+    "mocha": "^10.2.0",
     "nyc": "^14.1.1",
     "remark-cli": "^7.0.0",
     "sinon": "^7.5.0",
